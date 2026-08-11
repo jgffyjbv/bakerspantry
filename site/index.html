@@ -37,19 +37,20 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.15}
 header{position:sticky;top:0;z-index:50;background:rgba(255,253,251,.92);backdrop-filter:blur(10px);border-bottom:1px solid rgba(180,42,92,.1);transition:box-shadow .3s}
 header.scrolled{box-shadow:0 6px 24px -12px rgba(60,39,51,.18)}
 .nav{max-width:1180px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px}
-.brand{display:flex;align-items:baseline;gap:2px;font-family:'Playfair Display',serif;font-size:1.45rem;white-space:nowrap}
-.brand .the{font-size:.62rem;letter-spacing:.28em;text-transform:uppercase;color:var(--plum-soft);margin-right:6px;transform:translateY(-8px);display:inline-block}
-.brand b{color:var(--raspberry);font-weight:700;font-size:1.8rem;font-style:italic;margin-right:1px}
+.brand{display:flex;align-items:baseline;font-family:'Playfair Display',serif;font-size:1.32rem;white-space:nowrap}
+.brand .the{font-size:.58rem;letter-spacing:.24em;text-transform:uppercase;color:var(--plum-soft);margin-right:5px;transform:translateY(-7px);display:inline-block}
+.brand b{color:var(--raspberry);font-weight:700;font-size:1.62rem;font-style:italic;margin-right:-3px}
 .brand .bakers{font-weight:700;color:var(--plum)}
-.brand .pantry{font-weight:500;font-style:italic;color:var(--raspberry)}
-.nav-links{display:flex;gap:26px;font-size:.82rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--plum-soft)}
+.brand .pantry{font-weight:500;font-style:italic;color:var(--raspberry);margin-left:2px}
+.nav-links{display:flex;gap:22px;font-size:.78rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--plum-soft);white-space:nowrap}
 .nav-links a{position:relative;padding:4px 0;transition:color .25s}
 .nav-links a:hover{color:var(--raspberry)}
 .nav-links a::after{content:"";position:absolute;left:0;bottom:0;width:0;height:2px;background:var(--teal);transition:width .25s}
 .nav-links a:hover::after{width:100%}
 .nav-call{background:var(--raspberry);color:#fff;padding:10px 20px;border-radius:999px;font-weight:700;font-size:.85rem;letter-spacing:.05em;box-shadow:0 8px 20px -8px rgba(180,42,92,.55);transition:transform .2s, background .2s;white-space:nowrap}
 .nav-call:hover{background:var(--raspberry-dark);transform:translateY(-1px)}
-@media(max-width:900px){.nav-links{display:none}}
+@media(max-width:1150px){.nav-links{gap:14px;font-size:.72rem;letter-spacing:.03em}}
+@media(max-width:940px){.nav-links{display:none}}
 
 /* ---------- Hero ---------- */
 .hero{background:linear-gradient(160deg,var(--blush) 0%,#fdf6f3 55%,var(--cream) 100%);overflow:hidden;position:relative}
