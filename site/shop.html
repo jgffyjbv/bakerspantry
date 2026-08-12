@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Order Online — The Baker's Pantry · Monroe, NY</title>
+<meta name="description" content="Order cheesecakes, babkas, tarts and dairy treats online from The Baker's Pantry in Monroe, NY. Pay at pickup.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='%231d3557'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='%23c9a45c' font-family='Georgia' font-style='italic'>B</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#1d3557;--navy-deep:#152741;--navy-soft:#2a4a75;--gold:#c9a45c;--gold-soft:#dcc08a;--cream:#faf6ef;--cream-deep:#f2ead9;--ink:#22314a;--ink-soft:#5b6a83}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Jost',sans-serif;color:var(--ink);background:var(--cream);line-height:1.6;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.15;font-weight:500}
+.eyebrow{font-size:.72rem;font-weight:600;letter-spacing:.32em;text-transform:uppercase;color:var(--gold)}
+
+header{position:sticky;top:0;z-index:60;background:var(--navy);box-shadow:0 2px 18px rgba(13,25,45,.35)}
+.nav{max-width:1280px;margin:0 auto;padding:0 26px;height:66px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+.nav-brand{display:flex;align-items:center;gap:12px;color:#fff}
+.nav-brand svg{width:38px;height:38px;flex:none}
+.nav-brand .nm{font-family:'Playfair Display',serif;font-size:1.2rem;white-space:nowrap}
+.nav-links{display:flex;gap:26px;font-size:.74rem;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:#d7dfeb;white-space:nowrap}
+.nav-links a:hover{color:#fff}
+.cart-btn{position:relative;background:var(--gold);color:var(--navy-deep);padding:11px 22px;font-size:.74rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;border:none;cursor:pointer;font-family:'Jost',sans-serif;white-space:nowrap}
+.cart-btn:hover{background:var(--gold-soft)}
+.cart-btn .cnt{background:var(--navy);color:#fff;border-radius:999px;padding:2px 8px;margin-left:8px;font-size:.72rem}
+@media(max-width:800px){.nav-links{display:none}}
+
+.shop-hero{background:var(--navy);color:#fff;text-align:center;padding:56px 24px 60px}
+.shop-hero h1{font-size:clamp(2.2rem,5vw,3.4rem);margin:10px 0 12px}
+.shop-hero p{color:#c3cede;font-weight:300;max-width:34rem;margin:0 auto}
+.shop-hero .payline{display:inline-block;margin-top:18px;border:1px solid rgba(220,192,138,.5);color:var(--gold-soft);font-size:.74rem;letter-spacing:.22em;text-transform:uppercase;padding:9px 18px}
+
+main{max-width:1280px;margin:0 auto;padding:56px 24px 90px}
+.cat-block{margin-bottom:56px}
+.cat-head{display:flex;align-items:center;gap:18px;margin-bottom:22px}
+.cat-head h2{font-size:1.7rem;color:var(--navy);white-space:nowrap}
+.cat-head .rule{flex:1;height:1px;background:linear-gradient(90deg,rgba(201,164,92,.65),rgba(201,164,92,0))}
+.cat-head .hint{font-size:.68rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);white-space:nowrap}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:24px}
+.pcard{background:#fff;box-shadow:0 12px 34px -20px rgba(21,39,65,.24);overflow:hidden;display:flex;flex-direction:column;transition:transform .22s,box-shadow .22s}
+.pcard:hover{transform:translateY(-4px);box-shadow:0 22px 46px -22px rgba(21,39,65,.36)}
+.pcard .ph{aspect-ratio:1.06;overflow:hidden;background:#fff}
+.pcard .ph img{width:100%;height:100%;object-fit:cover;transition:transform .45s}
+.pcard:hover .ph img{transform:scale(1.07)}
+.pcard .ph.noimg{background:linear-gradient(160deg,var(--cream) 0%,var(--cream-deep) 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+.pcard .ph.noimg .mono{font-family:'Playfair Display',serif;font-style:italic;font-size:3rem;color:rgba(201,164,92,.5)}
+.pcard .ph.noimg .mlabel{font-size:.64rem;letter-spacing:.24em;text-transform:uppercase;color:rgba(34,49,74,.42);font-weight:600}
+.pcard .info{padding:16px 18px 18px;display:flex;flex-direction:column;gap:10px;flex:1}
+.pcard .row{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.pcard .name{font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--navy)}
+.pcard .price{font-weight:600;color:var(--gold);white-space:nowrap}
+.pcard .price small{display:block;text-align:right;font-size:.66rem;font-weight:500;color:var(--ink-soft)}
+.pcard .desc{font-size:.86rem;color:var(--ink-soft);font-weight:300}
+.addrow{margin-top:auto;display:flex;gap:10px;align-items:center}
+.qty{display:flex;border:1px solid #d8d2c4}
+.qty button{width:32px;height:38px;border:none;background:#fff;cursor:pointer;font-size:1.05rem;color:var(--navy);font-family:'Jost',sans-serif}
+.qty button:hover{background:var(--cream)}
+.qty input{width:38px;border:none;text-align:center;font-family:'Jost',sans-serif;font-size:.95rem;color:var(--ink);outline:none}
+.add{flex:1;background:var(--navy);color:#fff;border:none;height:38px;font-size:.7rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;font-family:'Jost',sans-serif;transition:background .2s}
+.add:hover{background:var(--navy-soft)}
+.add.added{background:var(--gold);color:var(--navy-deep)}
+.pcard.flash{outline:3px solid var(--gold);outline-offset:3px}
+
+/* cart drawer */
+.overlay{position:fixed;inset:0;background:rgba(16,28,50,.5);opacity:0;pointer-events:none;transition:opacity .25s;z-index:80}
+.overlay.open{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:-420px;width:min(420px,100vw);height:100%;background:#fff;z-index:90;box-shadow:-18px 0 50px rgba(13,25,45,.3);transition:right .3s;display:flex;flex-direction:column}
+.drawer.open{right:0}
+.drawer .dh{background:var(--navy);color:#fff;padding:18px 22px;display:flex;justify-content:space-between;align-items:center}
+.drawer .dh h3{font-size:1.2rem}
+.drawer .dh button{background:none;border:none;color:#fff;font-size:1.5rem;cursor:pointer;line-height:1}
+.dbody{flex:1;overflow-y:auto;padding:18px 22px}
+.line{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid #eee6d8}
+.line .ln{font-size:.95rem}
+.line .lp{color:var(--ink-soft);font-size:.85rem}
+.line .lq{display:flex;align-items:center;gap:8px}
+.line .lq button{width:26px;height:26px;border:1px solid #d8d2c4;background:#fff;cursor:pointer;color:var(--navy)}
+.line .rm{border:none;background:none;color:#b25151;cursor:pointer;font-size:.8rem;text-decoration:underline}
+.dfoot{padding:18px 22px;border-top:1px solid #eee6d8}
+.total-row{display:flex;justify-content:space-between;font-family:'Playfair Display',serif;font-size:1.25rem;color:var(--navy);margin-bottom:14px}
+.dfoot .note{font-size:.78rem;color:var(--ink-soft);margin-bottom:14px}
+.field{margin-bottom:12px}
+.field label{display:block;font-size:.68rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--navy);margin-bottom:5px}
+.field input,.field textarea{width:100%;padding:10px 12px;border:1px solid #d8d2c4;font-family:'Jost',sans-serif;font-size:.95rem;outline:none;background:#fff}
+.field input:focus,.field textarea:focus{border-color:var(--gold)}
+.checkout{width:100%;background:var(--gold);color:var(--navy-deep);border:none;padding:15px;font-size:.78rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;cursor:pointer;font-family:'Jost',sans-serif}
+.checkout:hover{background:var(--gold-soft)}
+.checkout:disabled{opacity:.6;cursor:wait}
+.msg{margin-top:10px;font-size:.9rem}
+.msg.err{color:#a33}
+.msg.ok{color:#2c7a4b}
+.success{padding:30px 22px;text-align:center}
+.success h3{color:var(--navy);font-size:1.5rem;margin-bottom:10px}
+.success p{color:var(--ink-soft);font-weight:300}
+.success .oid{font-family:'Playfair Display',serif;color:var(--gold);font-size:1.2rem;margin:12px 0}
+.empty{text-align:center;color:var(--ink-soft);padding:40px 0;font-weight:300}
+
+footer{background:var(--navy-deep);color:#b9c4d6;text-align:center;padding:34px 24px;font-weight:300;font-size:.9rem}
+footer a{text-decoration:underline;text-underline-offset:3px}
+footer a:hover{color:var(--gold-soft)}
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="nav">
+    <a href="/" class="nav-brand">
+      <svg viewBox="0 0 100 100"><rect x="2" y="2" width="96" height="96" fill="none" stroke="#c9a45c" stroke-width="2.5"/><rect x="9" y="9" width="82" height="82" fill="none" stroke="#c9a45c" stroke-width="1"/><text x="50" y="66" text-anchor="middle" font-family="Playfair Display,Georgia,serif" font-style="italic" font-size="44" fill="#c9a45c">BP</text></svg>
+      <span class="nm">The Baker's Pantry</span>
+    </a>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/#menu">Menu</a>
+      <a href="/#visit">Visit Us</a>
+      <a href="tel:+18457832700">845.783.2700</a>
+    </div>
+    <button class="cart-btn" id="cartBtn">Cart <span class="cnt" id="cartCnt">0</span></button>
+  </nav>
+</header>
+
+<div class="shop-hero">
+  <span class="eyebrow">Order Online</span>
+  <h1>The Pantry Shop</h1>
+  <p>Choose your favorites, place your order, and it will be boxed and waiting for you in Monroe.</p>
+  <span class="payline">Pay at pickup · No card needed</span>
+</div>
+
+<main id="main"><div class="empty">Loading the menu…</div></main>
+
+<div class="overlay" id="overlay"></div>
+<aside class="drawer" id="drawer">
+  <div class="dh"><h3>Your Order</h3><button id="closeDrawer" aria-label="Close">×</button></div>
+  <div class="dbody" id="dbody"></div>
+  <div class="dfoot" id="dfoot"></div>
+</aside>
+
+<footer>
+  The Baker's Pantry · 7 Van Buren Dr. #111, Monroe NY · <a href="tel:+18457832700">845.783.2700</a>
+</footer>
+
+<script>
+let PRODUCTS = [], CATS = [];
+const cart = JSON.parse(localStorage.getItem('bp_cart') || '{}');   // slug -> qty
+const $ = s => document.querySelector(s);
+
+const money = n => '$' + n;
+function saveCart(){ localStorage.setItem('bp_cart', JSON.stringify(cart)); renderCartCount(); }
+function cartCount(){ return Object.values(cart).reduce((a,b)=>a+b,0); }
+function renderCartCount(){ $('#cartCnt').textContent = cartCount(); }
+
+function phEl(p){
+  if (p.img) return '<div class="ph"><img loading="lazy" src="'+p.img+'" alt="'+p.name.replace(/"/g,'&quot;')+'"></div>';
+  return '<div class="ph noimg"><span class="mono">'+p.name[0]+'</span><span class="mlabel">Photo coming soon</span></div>';
+}
+
+function render(){
+  const main = $('#main');
+  main.innerHTML = '';
+  for (const c of CATS){
+    const items = PRODUCTS.filter(p => p.cat === c.key);
+    if (!items.length) continue;
+    const prices = [...new Set(items.map(p=>p.price))];
+    const hint = prices.length === 1 ? '$'+prices[0]+(items[0].per?' / '+items[0].per:' each') : '';
+    const block = document.createElement('div');
+    block.className = 'cat-block';
+    block.innerHTML = '<div class="cat-head"><h2>'+c.name+'</h2><div class="rule"></div>'+(hint?'<span class="hint">'+hint+'</span>':'')+'</div>';
+    const grid = document.createElement('div');
+    grid.className = 'grid';
+    for (const p of items){
+      const card = document.createElement('div');
+      card.className = 'pcard'; card.id = 'item-' + p.slug;
+      card.innerHTML = phEl(p) +
+        '<div class="info"><div class="row"><span class="name">'+p.name+'</span>'+
+        '<span class="price">'+money(p.price)+(p.per?'<small>'+p.per+'</small>':'')+'</span></div>'+
+        (p.desc?'<div class="desc">'+p.desc+'</div>':'')+
+        '<div class="addrow"><div class="qty"><button type="button" class="qm">−</button><input value="1" inputmode="numeric"><button type="button" class="qp">+</button></div>'+
+        '<button class="add">Add to Order</button></div></div>';
+      const inp = card.querySelector('input');
+      card.querySelector('.qm').onclick = () => inp.value = Math.max(1, (parseInt(inp.value)||1) - 1);
+      card.querySelector('.qp').onclick = () => inp.value = Math.min(99, (parseInt(inp.value)||1) + 1);
+      const addBtn = card.querySelector('.add');
+      addBtn.onclick = () => {
+        const q = Math.max(1, Math.min(99, parseInt(inp.value)||1));
+        cart[p.slug] = (cart[p.slug]||0) + q; saveCart();
+        addBtn.textContent = 'Added ✓'; addBtn.classList.add('added');
+        setTimeout(()=>{ addBtn.textContent='Add to Order'; addBtn.classList.remove('added'); }, 1200);
+      };
+      grid.appendChild(card);
+    }
+    block.appendChild(grid);
+    main.appendChild(block);
+  }
+  renderCartCount();
+  // deep link: /shop#item-slug or #slug
+  const h = location.hash.replace('#','');
+  if (h){
+    const el = document.getElementById(h.startsWith('item-') ? h : 'item-' + h);
+    if (el){ setTimeout(()=>{ el.scrollIntoView({behavior:'smooth', block:'center'}); el.classList.add('flash'); setTimeout(()=>el.classList.remove('flash'), 2600); }, 150); }
+  }
+}
+
+/* ---- drawer ---- */
+function openDrawer(){ renderDrawer(); $('#overlay').classList.add('open'); $('#drawer').classList.add('open'); }
+function closeDrawer(){ $('#overlay').classList.remove('open'); $('#drawer').classList.remove('open'); }
+$('#cartBtn').onclick = openDrawer;
+$('#closeDrawer').onclick = closeDrawer;
+$('#overlay').onclick = closeDrawer;
+
+function renderDrawer(){
+  const body = $('#dbody'), foot = $('#dfoot');
+  const slugs = Object.keys(cart).filter(s => PRODUCTS.some(p=>p.slug===s));
+  if (!slugs.length){ body.innerHTML = '<div class="empty">Your order is empty — add something delicious.</div>'; foot.innerHTML=''; return; }
+  let total = 0;
+  body.innerHTML = slugs.map(s => {
+    const p = PRODUCTS.find(x=>x.slug===s); const q = cart[s]; total += p.price*q;
+    return '<div class="line"><div><div class="ln">'+p.name+'</div><div class="lp">'+money(p.price)+(p.per?' / '+p.per:'')+'</div></div>'+
+      '<div class="lq"><button data-s="'+s+'" data-d="-1">−</button><span>'+q+'</span><button data-s="'+s+'" data-d="1">+</button>'+
+      '<button class="rm" data-s="'+s+'">remove</button></div></div>';
+  }).join('');
+  body.querySelectorAll('.lq button[data-d]').forEach(b => b.onclick = () => {
+    const s=b.dataset.s; cart[s]+= +b.dataset.d; if (cart[s]<1) delete cart[s]; saveCart(); renderDrawer();
+  });
+  body.querySelectorAll('.rm').forEach(b => b.onclick = () => { delete cart[b.dataset.s]; saveCart(); renderDrawer(); });
+  foot.innerHTML =
+    '<div class="total-row"><span>Total</span><span>'+money(total)+'</span></div>'+
+    '<div class="note">Pay at pickup — we\'ll have it boxed and ready. For Yom Tov, please order early.</div>'+
+    '<div class="field"><label>Name *</label><input id="cName" autocomplete="name"></div>'+
+    '<div class="field"><label>Phone *</label><input id="cPhone" autocomplete="tel" inputmode="tel"></div>'+
+    '<div class="field"><label>Email</label><input id="cEmail" autocomplete="email" inputmode="email"></div>'+
+    '<div class="field"><label>Pickup day / time</label><input id="cPickup" placeholder="e.g. Erev Shabbos, 11 AM"></div>'+
+    '<div class="field"><label>Note</label><textarea id="cNote" rows="2"></textarea></div>'+
+    '<button class="checkout" id="doOrder">Place Order</button><div class="msg" id="omsg"></div>';
+  $('#doOrder').onclick = placeOrder;
+}
+
+async function placeOrder(){
+  const btn = $('#doOrder'), msg = $('#omsg');
+  const items = Object.entries(cart).map(([slug,qty]) => ({slug, qty}));
+  const payload = { name: $('#cName').value, phone: $('#cPhone').value, email: $('#cEmail').value,
+                    pickup: $('#cPickup').value, note: $('#cNote').value, items };
+  if (!payload.name.trim() || !payload.phone.trim()){ msg.className='msg err'; msg.textContent='Please fill in your name and phone number.'; return; }
+  btn.disabled = true; msg.className='msg'; msg.textContent = 'Placing your order…';
+  try{
+    const r = await fetch('/api/order', {method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify(payload)});
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.error || 'Something went wrong.');
+    Object.keys(cart).forEach(k=>delete cart[k]); saveCart();
+    $('#dbody').innerHTML = '<div class="success"><h3>Thank you!</h3><div class="oid">Order '+d.id+'</div>'+
+      '<p>Your order for <b>'+money(d.total)+'</b> is in. We\'ll confirm by phone and have everything ready at pickup — payment at pickup.</p></div>';
+    $('#dfoot').innerHTML = '';
+  }catch(e){ msg.className='msg err'; msg.textContent = e.message; btn.disabled = false; }
+}
+
+fetch('/api/products').then(r=>r.json()).then(d => { PRODUCTS = d.products; CATS = d.cats; render(); })
+  .catch(()=>{ $('#main').innerHTML = '<div class="empty">Could not load the menu — please refresh, or call us at 845.783.2700.</div>'; });
+</script>
+</body>
+</html>

@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Baker's Pantry — Artisan Cheese Cakes &amp; Dairy Delights · Monroe, NY</title>
-<meta name="description" content="The Baker's Pantry in Monroe, NY — handcrafted cheesecakes, cheese babkas, tarts, logs and dairy treats baked fresh in small batches. Call 845-783-2700 to order.">
+<meta name="description" content="The Baker's Pantry in Monroe, NY — handcrafted cheesecakes, cheese babkas, tarts, logs and dairy treats baked fresh in small batches. Order online or call 845-783-2700.">
 <meta property="og:title" content="The Baker's Pantry — Monroe, NY">
-<meta property="og:description" content="Handcrafted cheesecakes, babkas, tarts &amp; dairy delights. Call 845-783-2700 to order.">
+<meta property="og:description" content="Handcrafted cheesecakes, babkas, tarts &amp; dairy delights. Order online for pickup in Monroe.">
 <meta property="og:image" content="images/hero.jpg">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='%231d3557'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='%23c9a45c' font-family='Georgia' font-style='italic'>B</text></svg>">
@@ -54,7 +54,8 @@ header{position:sticky;top:0;z-index:60;background:var(--navy);box-shadow:0 2px 
 
 /* ---------- Hero ---------- */
 .hero{position:relative;min-height:92vh;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;color:#fff}
-.hero .bg{position:absolute;inset:0;background:url('images/hero.jpg') center/cover no-repeat}
+.hero .bg{position:absolute;inset:0;background:url('images/hero.jpg') center/cover no-repeat;animation:heroZoom 9s ease-out forwards}
+@keyframes heroZoom{from{transform:scale(1.09)}to{transform:scale(1)}}
 .hero .veil{position:absolute;inset:0;background:linear-gradient(180deg,rgba(16,28,50,.72) 0%,rgba(16,28,50,.45) 45%,rgba(16,28,50,.72) 100%)}
 .hero-inner{position:relative;z-index:2;padding:90px 24px 70px;max-width:900px}
 .monogram{width:120px;height:120px;margin:0 auto 34px;display:block;filter:drop-shadow(0 10px 24px rgba(0,0,0,.35))}
@@ -73,11 +74,11 @@ header{position:sticky;top:0;z-index:60;background:var(--navy);box-shadow:0 2px 
 section{padding:92px 24px}
 .wrap{max-width:1280px;margin:0 auto}
 .trio{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;max-width:1120px;margin:0 auto}
-.trio-card{background:#fff;box-shadow:0 16px 44px -22px rgba(21,39,65,.28);transition:transform .25s,box-shadow .25s}
+.trio-card{display:block;background:#fff;box-shadow:0 16px 44px -22px rgba(21,39,65,.28);transition:transform .25s,box-shadow .25s}
 .trio-card:hover{transform:translateY(-6px);box-shadow:0 26px 54px -24px rgba(21,39,65,.4)}
 .trio-card .ph{aspect-ratio:1.05;overflow:hidden}
 .trio-card .ph img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
-.trio-card:hover .ph img{transform:scale(1.05)}
+.trio-card:hover .ph img{transform:scale(1.08)}
 .trio-card .tc{padding:24px 26px 28px;text-align:center}
 .trio-card .tag{font-size:.66rem;font-weight:600;letter-spacing:.3em;text-transform:uppercase;color:var(--gold)}
 .trio-card h3{font-size:1.4rem;color:var(--navy);margin-top:8px}
@@ -91,10 +92,10 @@ section{padding:92px 24px}
 .rail::-webkit-scrollbar{height:8px}
 .rail::-webkit-scrollbar-track{background:rgba(255,255,255,.1)}
 .rail::-webkit-scrollbar-thumb{background:var(--gold)}
-.fav-card{flex:0 0 258px;scroll-snap-align:start;background:#fff;color:var(--ink)}
+.fav-card{display:block;flex:0 0 258px;scroll-snap-align:start;background:#fff;color:var(--ink)}
 .fav-card .ph{aspect-ratio:1;overflow:hidden}
-.fav-card .ph img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
-.fav-card:hover .ph img{transform:scale(1.06)}
+.fav-card .ph img{width:100%;height:100%;object-fit:cover;transition:transform .45s}
+.fav-card:hover .ph img{transform:scale(1.08)}
 .fav-card .fc{padding:16px 18px 20px;text-align:center}
 .fav-card .tag{font-size:.62rem;font-weight:600;letter-spacing:.28em;text-transform:uppercase;color:var(--gold)}
 .fav-card h3{font-size:1.08rem;color:var(--navy);margin-top:6px}
@@ -104,7 +105,7 @@ section{padding:92px 24px}
 .tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:30px}
 .tile{position:relative;overflow:hidden;min-height:380px;display:flex;align-items:flex-end;color:#fff}
 .tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .6s}
-.tile:hover img{transform:scale(1.06)}
+.tile:hover img{transform:scale(1.07)}
 .tile::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(16,28,50,0) 35%,rgba(16,28,50,.82) 100%)}
 .tile .tl{position:relative;z-index:2;padding:28px;width:100%;text-align:center}
 .tile .tag{font-size:.64rem;font-weight:600;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-soft)}
@@ -129,12 +130,12 @@ section{padding:92px 24px}
 .menu-cat .rule{flex:1;height:1px;background:linear-gradient(90deg,rgba(201,164,92,.65),rgba(201,164,92,0))}
 .menu-cat .hint{font-size:.68rem;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);white-space:nowrap}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(235px,1fr));gap:24px}
-.card{background:#fff;box-shadow:0 12px 34px -20px rgba(21,39,65,.24);overflow:hidden;transition:transform .22s,box-shadow .22s;opacity:0;transform:translateY(16px)}
+.card{display:block;background:#fff;box-shadow:0 12px 34px -20px rgba(21,39,65,.24);overflow:hidden;transition:transform .22s,box-shadow .22s;opacity:0;transform:translateY(16px)}
 .card.vis{opacity:1;transform:translateY(0)}
 .card:hover{transform:translateY(-5px);box-shadow:0 22px 46px -22px rgba(21,39,65,.36)}
 .card .ph{aspect-ratio:1.06;overflow:hidden;background:#fff}
-.card .ph img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
-.card:hover .ph img{transform:scale(1.05)}
+.card .ph img{width:100%;height:100%;object-fit:cover;transition:transform .45s}
+.card:hover .ph img{transform:scale(1.08)}
 .card .ph.noimg{background:linear-gradient(160deg,var(--cream) 0%,var(--cream-deep) 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
 .card .ph.noimg .mono{font-family:'Playfair Display',serif;font-style:italic;font-size:3rem;color:rgba(201,164,92,.5)}
 .card .ph.noimg .mlabel{font-size:.66rem;letter-spacing:.26em;text-transform:uppercase;color:rgba(34,49,74,.42);font-weight:600}
@@ -142,18 +143,21 @@ section{padding:92px 24px}
 .card .name{font-family:'Playfair Display',serif;font-size:1.04rem;color:var(--navy)}
 .card .price{font-weight:600;color:var(--gold);white-space:nowrap;font-size:1rem}
 .card .price small{display:block;text-align:right;font-size:.66rem;font-weight:500;letter-spacing:.05em;color:var(--ink-soft)}
+.menu-cta{text-align:center;margin-top:48px}
 
 /* ---------- Platters ---------- */
 .platter-grid{display:grid;grid-template-columns:1fr 1fr;gap:30px;max-width:1120px;margin:0 auto}
-.platter{background:#fff;box-shadow:0 16px 44px -22px rgba(21,39,65,.28);display:grid;grid-template-columns:1.1fr 1fr;transition:transform .25s}
+.platter{display:grid;background:#fff;box-shadow:0 16px 44px -22px rgba(21,39,65,.28);grid-template-columns:1.1fr 1fr;transition:transform .25s;overflow:hidden}
 .platter:hover{transform:translateY(-4px)}
-.platter img{width:100%;height:100%;object-fit:cover;min-height:220px}
+.platter .pph{overflow:hidden}
+.platter .pph img{width:100%;height:100%;object-fit:cover;min-height:220px;transition:transform .5s}
+.platter:hover .pph img{transform:scale(1.06)}
 .platter .pinfo{padding:30px 28px;display:flex;flex-direction:column;justify-content:center}
 .platter .tag{font-size:.64rem;font-weight:600;letter-spacing:.3em;text-transform:uppercase;color:var(--gold)}
 .platter h3{font-size:1.4rem;color:var(--navy);margin:8px 0 10px}
 .platter p{color:var(--ink-soft);font-size:.94rem;font-weight:300;margin-bottom:16px}
 .platter .ptag{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--gold)}
-@media(max-width:900px){.platter-grid{grid-template-columns:1fr}.platter{grid-template-columns:1fr}.platter img{max-height:250px}}
+@media(max-width:900px){.platter-grid{grid-template-columns:1fr}.platter{grid-template-columns:1fr}.platter .pph img{max-height:250px}}
 
 /* ---------- Visit ---------- */
 .visit{background:var(--cream-deep)}
@@ -173,6 +177,7 @@ section{padding:92px 24px}
 .band p{color:#c3cede;font-weight:300;max-width:32rem;margin:0 auto 28px}
 .band .phone-big{display:inline-block;font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,3.2rem);color:var(--gold);transition:color .2s}
 .band .phone-big:hover{color:var(--gold-soft)}
+.band .or{margin:18px 0 6px;font-size:.74rem;letter-spacing:.3em;text-transform:uppercase;color:#8fa1bb}
 
 /* ---------- Footer ---------- */
 footer{background:var(--navy-deep);color:#b9c4d6;padding:70px 24px 34px;font-weight:300}
@@ -205,10 +210,10 @@ footer{background:var(--navy-deep);color:#b9c4d6;padding:70px 24px 34px;font-wei
       <a href="#top">Home</a>
       <a href="#favorites">Favorites</a>
       <a href="#menu">Menu</a>
-      <a href="#platters">Platters</a>
+      <a href="/shop">Shop</a>
       <a href="#visit">Visit Us</a>
     </div>
-    <a class="nav-order" href="tel:+18457832700">Call to Order</a>
+    <a class="nav-order" href="/shop">Order Online</a>
   </nav>
 </header>
 
@@ -228,9 +233,9 @@ footer{background:var(--navy-deep);color:#b9c4d6;padding:70px 24px 34px;font-wei
     <h1>The Baker's Pantry</h1>
     <p class="lead">Silky cheesecakes, cream-crowned babkas, and petite dairy treats — handcrafted in small batches and finished by hand in Monroe, New York.</p>
     <div class="hero-ctas">
-      <a class="btn-navy" href="#visit">Find Us</a>
-      <a class="btn-gold" href="tel:+18457832700">Call to Order</a>
       <a class="btn-navy" href="#menu">View Menu</a>
+      <a class="btn-gold" href="/shop">Order Online</a>
+      <a class="btn-navy" href="#visit">Find Us</a>
     </div>
   </div>
   <span class="scroll-hint">Scroll</span>
@@ -244,11 +249,7 @@ footer{background:var(--navy-deep);color:#b9c4d6;padding:70px 24px 34px;font-wei
       <h2>The Art of the Cheesecake</h2>
       <p>Baked low and slow for that silky center, then dressed by hand — every cake leaves our kitchen ready for the head of the table.</p>
     </div>
-    <div class="trio">
-      <div class="trio-card"><div class="ph"><img loading="lazy" src="images/vanilla-cheesecake.jpg" alt="Vanilla cheesecake crowned with caramel rosettes"></div><div class="tc"><span class="tag">Signature</span><h3>10&Prime; Vanilla Cheesecake</h3></div></div>
-      <div class="trio-card"><div class="ph"><img loading="lazy" src="images/cheese-babka.jpg" alt="Cheese babka piled with cream"></div><div class="tc"><span class="tag">Fan Favorite</span><h3>Cream-Topped Cheese Babka</h3></div></div>
-      <div class="trio-card"><div class="ph"><img loading="lazy" src="images/vanilla-cheesecake-log.jpg" alt="Caramel topped cheesecake log with sugar flowers"></div><div class="tc"><span class="tag">Simcha Special</span><h3>Caramel-Topped Cheesecake Log</h3></div></div>
-    </div>
+    <div class="trio" id="trioWrap"></div>
   </div>
 </section>
 
@@ -258,20 +259,9 @@ footer{background:var(--navy-deep);color:#b9c4d6;padding:70px 24px 34px;font-wei
     <div class="sec-head">
       <span class="eyebrow">From Our Kitchen</span>
       <h2>Our Favorites</h2>
-      <p>A taste of everything we love — cakes, babkas, tarts and petite treats, all baked fresh in small batches.</p>
+      <p>A taste of everything we love — cakes, babkas, tarts and petite treats, all baked fresh in small batches. Click any treat to order it.</p>
     </div>
-    <div class="rail">
-      <div class="fav-card"><div class="ph"><img loading="lazy" src="images/marble-cheesecake.jpg" alt="Marble cheesecake"></div><div class="fc"><span class="tag">Cheesecakes</span><h3>Marble Cheesecake</h3><div class="pr">$85</div></div></div>
-      <div class="fav-card"><div class="ph"><img loading="lazy" src="images/chocolate-cheese-babka.jpg" alt="Chocolate cheese babka"></div><div class="fc"><span class="tag">Babkas</span><h3>Chocolate Cheese Babka</h3><div class="pr">$85</div></div></div>
-      <div class="fav-card"><div class="ph"><img loading="lazy" src="images/lotus-cheese-tart.jpg" alt="Lotus cheese tart"></div><div class="fc"><span class="tag">Tarts</span><h3>Lotus Cheese Tart</h3><div class="pr">$79</div></div></div>
-      <div class="fav-card"><div class="ph"><img loading="lazy" src="images/cheese-hearts.jpg" alt="Cheese hearts with caramel centers"></div><div class="fc"><span class="tag">Petite Treats</span><h3>Cheese Hearts</h3><div class="pr">$51 / 12 pcs</div></div></div>
-      <div class="fav-card"><div class="ph"><img loading="lazy" src="images/oreo-cheesecake.jpg" alt="Cookies and cream cheesecake"></div><div class="fc"><span class="tag">Cheesecakes</span><h3>Cookies 'n' Cream</h3><div class="pr">$85</div></div></div>
-      <div class="fav-card"><div class="ph"><img loading="lazy" src="images/cheese-bites.jpg" alt="Mini cheesecake bites with dulce rosettes"></div><div class="fc"><span class="tag">Petite Treats</span><h3>Cheese Bites</h3><div class="pr">$30 / 12 pcs</div></div></div>
-      <div class="fav-card"><div class="ph"><img loading="lazy" src="images/strawberry-cheesecake-log.jpg" alt="Strawberry cheesecake log"></div><div class="fc"><span class="tag">Cake Logs</span><h3>Strawberry Log</h3><div class="pr">$95</div></div></div>
-      <div class="fav-card"><div class="ph"><img loading="lazy" src="images/melt-in-mouth-cookies.jpg" alt="Melt in mouth cookies"></div><div class="fc"><span class="tag">Cookies</span><h3>Melt-in-Mouth Cookies</h3><div class="pr">$39 / 12 pcs</div></div></div>
-      <div class="fav-card"><div class="ph"><img loading="lazy" src="images/carrot-cheese-log.jpg" alt="Carrot and cheese log"></div><div class="fc"><span class="tag">Cake Logs</span><h3>Carrot 'n' Cheese Log</h3><div class="pr">$49</div></div></div>
-      <div class="fav-card"><div class="ph"><img loading="lazy" src="images/cheese-cannolis.jpg" alt="Cheese cannolis"></div><div class="fc"><span class="tag">Petite Treats</span><h3>Cheese Cannolis</h3><div class="pr">$36 / 12 pcs</div></div></div>
-    </div>
+    <div class="rail" id="favRail"></div>
   </div>
 </section>
 
@@ -304,7 +294,7 @@ footer{background:var(--navy-deep);color:#b9c4d6;padding:70px 24px 34px;font-wei
       <div class="stat"><div class="n">30+</div><div class="l">Handcrafted Creations</div></div>
       <div class="stat"><div class="n">100%</div><div class="l">Finished by Hand</div></div>
       <div class="stat"><div class="n">12</div><div class="l">Treats per Dozen Box</div></div>
-      <div class="stat"><div class="n">1</div><div class="l">Call to Order</div></div>
+      <div class="stat"><div class="n">1</div><div class="l">Click to Order</div></div>
     </div>
   </div>
 </section>
@@ -315,69 +305,10 @@ footer{background:var(--navy-deep);color:#b9c4d6;padding:70px 24px 34px;font-wei
     <div class="sec-head">
       <span class="eyebrow">The Full Menu</span>
       <h2>Cakes, Babkas &amp; Everything Between</h2>
-      <p>Every item, every price — call ahead and it will be boxed and waiting for you.</p>
+      <p>Every item, every price — click anything to order it online, or call and it will be boxed and waiting for you.</p>
     </div>
-
-    <div class="menu-cat"><h3>10&Prime; Cheesecakes</h3><div class="rule"></div><span class="hint">$85 each</span></div>
-    <div class="grid">
-      <div class="card"><div class="ph"><img loading="lazy" src="images/vanilla-cheesecake.jpg" alt="Vanilla cheesecake"></div><div class="info"><span class="name">Vanilla Cheesecake</span><span class="price">$85</span></div></div>
-      <div class="card"><div class="ph"><img loading="lazy" src="images/marble-cheesecake.jpg" alt="Marble cheesecake"></div><div class="info"><span class="name">Marble Cheesecake</span><span class="price">$85</span></div></div>
-      <div class="card"><div class="ph"><img loading="lazy" src="images/oreo-cheesecake.jpg" alt="Cookies and cream cheesecake"></div><div class="info"><span class="name">Cookies 'n' Cream</span><span class="price">$85</span></div></div>
-      <div class="card"><div class="ph"><img loading="lazy" src="images/strawberry-cheesecake.jpg" alt="Strawberry cheesecake"></div><div class="info"><span class="name">Strawberry Cheesecake</span><span class="price">$85</span></div></div>
-    </div>
-
-    <div class="menu-cat"><h3>Cheesecake Logs</h3><div class="rule"></div><span class="hint">Simcha-ready</span></div>
-    <div class="grid">
-      <div class="card"><div class="ph"><img loading="lazy" src="images/strawberry-cheesecake-log.jpg" alt="Strawberry cheesecake log"></div><div class="info"><span class="name">Strawberry Log</span><span class="price">$95</span></div></div>
-      <div class="card"><div class="ph"><img loading="lazy" src="images/oreo-cheesecake-log.jpg" alt="Cookies and cream cheesecake log"></div><div class="info"><span class="name">Cookies 'n' Cream Log</span><span class="price">$95</span></div></div>
-      <div class="card"><div class="ph"><img loading="lazy" src="images/marble-cheesecake-log.jpg" alt="Marble cheesecake log"></div><div class="info"><span class="name">Marble Log</span><span class="price">$95</span></div></div>
-      <div class="card"><div class="ph"><img loading="lazy" src="images/vanilla-cheesecake-log.jpg" alt="Vanilla cheesecake log"></div><div class="info"><span class="name">Vanilla Log</span><span class="price">$95</span></div></div>
-      <div class="card"><div class="ph"><img loading="lazy" src="images/carrot-cheese-log.jpg" alt="Carrot cheese log"></div><div class="info"><span class="name">Carrot 'n' Cheese Log</span><span class="price">$49</span></div></div>
-      <div class="card"><div class="ph"><img loading="lazy" src="images/nine-inch-cheesecake.jpg" alt="9 inch caramel topped cheesecake"></div><div class="info"><span class="name">9&Prime; Cheesecake</span><span class="price">$39<small>12 pcs</small></span></div></div>
-      <div class="card"><div class="ph"><img loading="lazy" src="images/wafer-cake-log.jpg" alt="Dairy wafer cake log"></div><div class="info"><span class="name">Dairy Wafer Cake Log</span><span class="price">$125</span></div></div>
-      <div class="card"><div class="ph"><img loading="lazy" src="images/wafer-cake-slices.jpg" alt="Dairy wafer cake slices"></div><div class="info"><span class="name">Wafer Cake Slices</span><span class="price">$32<small>12 pcs</small></span></div></div>
-    </div>
-
-    <div class="menu-cat"><h3>Cream-Topped Babkas</h3><div class="rule"></div><span class="hint">$85 each</span></div>
-    <div class="grid">
-      <div class="card"><div class="ph"><img loading="lazy" src="images/cheese-babka.jpg" alt="Cheese babka"></div><div class="info"><span class="name">Cheese Babka</span><span class="price">$85</span></div></div>
-      <div class="card"><div class="ph"><img loading="lazy" src="images/cinnamon-cheese-babka.jpg" alt="Cinnamon cheese babka"></div><div class="info"><span class="name">Cinnamon Cheese Babka</span><span class="price">$85</span></div></div>
-      <div class="card"><div class="ph"><img loading="lazy" src="images/chocolate-cheese-babka.jpg" alt="Chocolate cheese babka"></div><div class="info"><span class="name">Chocolate Cheese Babka</span><span class="price">$85</span></div></div>
-    </div>
-
-    <div class="menu-cat"><h3>Cheese Tarts</h3><div class="rule"></div><span class="hint">$79 each</span></div>
-    <div class="grid">
-      <div class="card"><div class="ph"><img loading="lazy" src="images/lotus-cheese-tart.jpg" alt="Lotus cheese tart"></div><div class="info"><span class="name">Lotus Cheese Tart</span><span class="price">$79</span></div></div>
-      <div class="card"><div class="ph"><img loading="lazy" src="images/caramel-cheese-tart.jpg" alt="Caramel cheese tart"></div><div class="info"><span class="name">Caramel Cheese Tart</span><span class="price">$79</span></div></div>
-      <div class="card"><div class="ph"><img loading="lazy" src="images/chocolate-cheese-tart.jpg" alt="Chocolate cheese tart"></div><div class="info"><span class="name">Chocolate Cheese Tart</span><span class="price">$79</span></div></div>
-    </div>
-
-    <div class="menu-cat"><h3>Treats by the Dozen</h3><div class="rule"></div><span class="hint">Perfect for platters</span></div>
-    <div class="grid">
-      <div class="card"><div class="ph"><img loading="lazy" src="images/cheese-buns.jpg" alt="Cheese buns"></div><div class="info"><span class="name">Cheese Buns</span><span class="price">$36<small>12 pcs</small></span></div></div>
-      <div class="card"><div class="ph"><img loading="lazy" src="images/cheese-bars.jpg" alt="Cheese bars"></div><div class="info"><span class="name">Cheese Bars</span><span class="price">$21<small>12 pcs</small></span></div></div>
-      <div class="card"><div class="ph"><img loading="lazy" src="images/cheese-bites.jpg" alt="Cheese bites"></div><div class="info"><span class="name">Cheese Bites</span><span class="price">$30<small>12 pcs</small></span></div></div>
-      <div class="card"><div class="ph"><img loading="lazy" src="images/cheese-hearts.jpg" alt="Cheese hearts"></div><div class="info"><span class="name">Cheese Hearts</span><span class="price">$51<small>12 pcs</small></span></div></div>
-      <div class="card"><div class="ph"><img loading="lazy" src="images/cheese-cannolis.jpg" alt="Cheese cannolis"></div><div class="info"><span class="name">Cheese Cannolis</span><span class="price">$36<small>12 pcs</small></span></div></div>
-      <div class="card"><div class="ph"><img loading="lazy" src="images/cheese-florets.jpg" alt="Cheese florets"></div><div class="info"><span class="name">Cheese Florets</span><span class="price">$18<small>12 pcs</small></span></div></div>
-      <div class="card"><div class="ph"><img loading="lazy" src="images/cheese-balls.jpg" alt="Cheese balls"></div><div class="info"><span class="name">Cheese Balls</span><span class="price">$39<small>12 pcs</small></span></div></div>
-      <div class="card"><div class="ph"><img loading="lazy" src="images/melt-in-mouth-cookies.jpg" alt="Melt in mouth cookies"></div><div class="info"><span class="name">Melt-in-Mouth Cookies</span><span class="price">$39<small>12 pcs</small></span></div></div>
-      <div class="card"><div class="ph"><img loading="lazy" src="images/pecan-cheese-squares.jpg" alt="Pecan cheese squares"></div><div class="info"><span class="name">Pecan Cheese Squares</span><span class="price">$32<small>12 pcs</small></span></div></div>
-      <div class="card"><div class="ph"><img loading="lazy" src="images/cheesecake-square.jpg" alt="Cheesecake squares"></div><div class="info"><span class="name">Cheesecake Squares</span><span class="price">$32<small>12 pcs</small></span></div></div>
-      <div class="card"><div class="ph"><img loading="lazy" src="images/mini-carrot-cheese-cakes.jpg" alt="Mini carrot cheese cakes"></div><div class="info"><span class="name">Mini Carrot Cheese Cakes</span><span class="price">$56<small>12 pcs</small></span></div></div>
-      <div class="card"><div class="ph"><img loading="lazy" src="images/large-carrot-muffins.jpg" alt="Large carrot muffin"></div><div class="info"><span class="name">Large Carrot Muffins</span><span class="price">$51<small>12 pcs</small></span></div></div>
-      <div class="card"><div class="ph"><img loading="lazy" src="images/mini-carrot-muffins.jpg" alt="Mini carrot muffins"></div><div class="info"><span class="name">Mini Carrot Muffins</span><span class="price">$39<small>12 pcs</small></span></div></div>
-      <div class="card"><div class="ph noimg"><span class="mono">C</span><span class="mlabel">Muffins</span></div><div class="info"><span class="name">Crumble Muffins</span><span class="price">$51<small>12 pcs</small></span></div></div>
-      <div class="card"><div class="ph noimg"><span class="mono">S</span><span class="mlabel">Cake Pops</span></div><div class="info"><span class="name">Strawberry Cheesecake Pops</span><span class="price">$60<small>12 pcs</small></span></div></div>
-      <div class="card"><div class="ph noimg"><span class="mono">P</span><span class="mlabel">Cake Pops</span></div><div class="info"><span class="name">Cheesecake Pops</span><span class="price">$51<small>12 pcs</small></span></div></div>
-      <div class="card"><div class="ph noimg"><span class="mono">F</span><span class="mlabel">Flower Balls</span></div><div class="info"><span class="name">Chocolate Cheese Flower Balls</span><span class="price">$48<small>12 pcs</small></span></div></div>
-      <div class="card"><div class="ph noimg"><span class="mono">S</span><span class="mlabel">Cookies</span></div><div class="info"><span class="name">Cheese Surprise Cookies</span><span class="price">$36<small>12 pcs</small></span></div></div>
-      <div class="card"><div class="ph noimg"><span class="mono">D</span><span class="mlabel">Donuts</span></div><div class="info"><span class="name">Cheese Donuts</span><span class="price">$32<small>12 pcs</small></span></div></div>
-      <div class="card"><div class="ph noimg"><span class="mono">J</span><span class="mlabel">Stacks</span></div><div class="info"><span class="name">Mini Jack n' Jill Stacks</span><span class="price">$45<small>12 pcs</small></span></div></div>
-      <div class="card"><div class="ph noimg"><span class="mono">B</span><span class="mlabel">Cookies</span></div><div class="info"><span class="name">Butterfly Cookies</span><span class="price">$45<small>12 pcs</small></span></div></div>
-      <div class="card"><div class="ph noimg"><span class="mono">F</span><span class="mlabel">Cookies</span></div><div class="info"><span class="name">Flower Cookies</span><span class="price">$45<small>12 pcs</small></span></div></div>
-      <div class="card"><div class="ph noimg"><span class="mono">C</span><span class="mlabel">Cinnamon</span></div><div class="info"><span class="name">Cinnamon Sticks</span><span class="price">$60<small>12 pcs</small></span></div></div>
-    </div>
+    <div id="menuWrap"></div>
+    <div class="menu-cta"><a class="btn-gold" href="/shop">Order Online</a></div>
   </div>
 </section>
 
@@ -389,16 +320,7 @@ footer{background:var(--navy-deep);color:#b9c4d6;padding:70px 24px 34px;font-wei
       <h2>Assorted Combo Platters</h2>
       <p>A curated spread of our petite treats, beautifully arranged and ready to serve.</p>
     </div>
-    <div class="platter-grid">
-      <div class="platter">
-        <img loading="lazy" src="images/rectangle-combo.jpg" alt="Rectangle assorted combo box">
-        <div class="pinfo"><span class="tag">Ready to Serve</span><h3>Rectangle Assorted Combo</h3><p>A generous presentation box filled with an assortment of our most-loved petite cheese treats.</p><span class="ptag">$95</span></div>
-      </div>
-      <div class="platter">
-        <img loading="lazy" src="images/oblong-combo.jpg" alt="Oblong assorted combo tray">
-        <div class="pinfo"><span class="tag">For the Crowd</span><h3>Oblong Assorted Combo</h3><p>Our grand oblong tray — an abundant, party-ready spread of assorted dairy delicacies.</p><span class="ptag">$135</span></div>
-      </div>
-    </div>
+    <div class="platter-grid" id="platterWrap"></div>
   </div>
 </section>
 
@@ -408,7 +330,7 @@ footer{background:var(--navy-deep);color:#b9c4d6;padding:70px 24px 34px;font-wei
     <div class="sec-head">
       <span class="eyebrow">Find Us</span>
       <h2>Visit the Pantry</h2>
-      <p>Right in the heart of Monroe — call ahead and your order will be boxed and waiting.</p>
+      <p>Right in the heart of Monroe — order online or call ahead, and your order will be boxed and waiting.</p>
     </div>
     <div class="visit-card">
       <div class="num">01</div>
@@ -417,7 +339,7 @@ footer{background:var(--navy-deep);color:#b9c4d6;padding:70px 24px 34px;font-wei
       <a class="vphone" href="tel:+18457832700">845.783.2700</a>
       <div class="vlinks">
         <a class="btn-navy" href="https://maps.google.com/?q=7+Van+Buren+Dr+%23111+Monroe+NY" target="_blank" rel="noopener">Get Directions</a>
-        <a class="btn-gold" href="tel:+18457832700">Call to Order</a>
+        <a class="btn-gold" href="/shop">Order Online</a>
       </div>
     </div>
   </div>
@@ -427,7 +349,9 @@ footer{background:var(--navy-deep);color:#b9c4d6;padding:70px 24px 34px;font-wei
 <section class="band" style="padding:80px 24px">
   <span class="eyebrow">We'd Love to Bake for You</span>
   <h2>Place Your Order</h2>
-  <p>Call with your order and pickup time — for Yom Tov and simchas, we recommend ordering early.</p>
+  <p>Order online for pickup — or call with your order and pickup time. For Yom Tov and simchas, we recommend ordering early.</p>
+  <a class="btn-gold" href="/shop" style="margin-bottom:6px">Order Online</a>
+  <div class="or">or call</div>
   <a class="phone-big" href="tel:+18457832700">845.783.2700</a>
 </section>
 
@@ -447,15 +371,15 @@ footer{background:var(--navy-deep);color:#b9c4d6;padding:70px 24px 34px;font-wei
         <li><a href="#top">Home</a></li>
         <li><a href="#favorites">Favorites</a></li>
         <li><a href="#menu">Menu</a></li>
-        <li><a href="#platters">Platters</a></li>
+        <li><a href="/shop">Order Online</a></li>
         <li><a href="#visit">Visit Us</a></li>
       </ul>
     </div>
     <div>
       <h4>Ordering</h4>
       <ul>
-        <li>Orders by phone</li>
-        <li>Pickup in Monroe, NY</li>
+        <li><a href="/shop">Order online</a> or by phone</li>
+        <li>Pay at pickup in Monroe, NY</li>
         <li>Custom platters on request</li>
       </ul>
       <p class="note">For Yom Tov &amp; simchas, please order early.</p>
@@ -494,8 +418,74 @@ footer{background:var(--navy-deep);color:#b9c4d6;padding:70px 24px 34px;font-wei
 </script>
 <script>
 document.getElementById('yr').textContent = new Date().getFullYear();
+const money = n => '$' + n;
+const shopLink = p => '/shop#item-' + p.slug;
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
+
+function phEl(p, label){
+  if (p.img) return '<div class="ph"><img loading="lazy" src="'+esc(p.img)+'" alt="'+esc(p.name)+'"></div>';
+  return '<div class="ph noimg"><span class="mono">'+esc(p.name[0])+'</span><span class="mlabel">'+(label||'Photo coming soon')+'</span></div>';
+}
+
 const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting){ e.target.classList.add('vis'); io.unobserve(e.target);} }), {threshold:.08, rootMargin:'0px 0px -40px 0px'});
-document.querySelectorAll('.card').forEach((c,i) => { c.style.transitionDelay = (i%4)*55+'ms'; c.style.transition = 'opacity .5s, transform .5s, box-shadow .22s'; io.observe(c); });
+function observeCards(){
+  document.querySelectorAll('.card:not(.vis)').forEach((c,i) => {
+    c.style.transitionDelay = (i%4)*55+'ms';
+    c.style.transition = 'opacity .5s, transform .5s, box-shadow .22s';
+    io.observe(c);
+  });
+}
+
+fetch('/api/products').then(r=>r.json()).then(({products, cats}) => {
+  // ----- signature trio: tagged items first, then favorites fill in -----
+  const tagged = products.filter(p => p.trio);
+  const fill = products.filter(p => !p.trio && p.fav && p.img);
+  const trio = tagged.concat(fill).slice(0, 3);
+  document.getElementById('trioWrap').innerHTML = trio.map(p =>
+    '<a class="trio-card" href="'+shopLink(p)+'">'+phEl(p)+
+    '<div class="tc"><span class="tag">'+esc(p.trio||'Fan Favorite')+'</span><h3>'+esc(p.name)+'</h3></div></a>').join('');
+
+  // ----- favorites rail: favs first, auto-fill to 10 with photographed items -----
+  const catName = k => (cats.find(c=>c.key===k)||{}).name || '';
+  const favs = products.filter(p=>p.fav);
+  const extras = products.filter(p=>!p.fav && p.img && !trio.includes(p) && p.cat!=='platters');
+  const rail = favs.concat(extras).slice(0, 10);
+  document.getElementById('favRail').innerHTML = rail.map(p =>
+    '<a class="fav-card" href="'+shopLink(p)+'">'+phEl(p)+
+    '<div class="fc"><span class="tag">'+esc(catName(p.cat))+'</span><h3>'+esc(p.name)+'</h3>'+
+    '<div class="pr">'+money(p.price)+(p.per?' / '+esc(p.per):'')+'</div></div></a>').join('');
+
+  // ----- full menu grouped by category (platters get their own section) -----
+  const menuWrap = document.getElementById('menuWrap');
+  menuWrap.innerHTML = '';
+  for (const c of cats){
+    if (c.key === 'platters') continue;
+    const items = products.filter(p => p.cat === c.key);
+    if (!items.length) continue;
+    const prices = [...new Set(items.map(p=>p.price))];
+    const hint = prices.length === 1 ? '$'+prices[0]+(items[0].per?' / '+items[0].per:' each') : '';
+    const cat = document.createElement('div');
+    cat.innerHTML = '<div class="menu-cat"><h3>'+esc(c.name)+'</h3><div class="rule"></div>'+(hint?'<span class="hint">'+hint+'</span>':'')+'</div>';
+    const grid = document.createElement('div');
+    grid.className = 'grid';
+    grid.innerHTML = items.map(p =>
+      '<a class="card" href="'+shopLink(p)+'">'+phEl(p)+
+      '<div class="info"><span class="name">'+esc(p.name)+'</span>'+
+      '<span class="price">'+money(p.price)+(p.per?'<small>'+esc(p.per)+'</small>':'')+'</span></div></a>').join('');
+    cat.appendChild(grid);
+    menuWrap.appendChild(cat);
+  }
+  observeCards();
+
+  // ----- platters -----
+  const plats = products.filter(p => p.cat === 'platters');
+  document.getElementById('platterWrap').innerHTML = plats.map((p,i) =>
+    '<a class="platter" href="'+shopLink(p)+'"><div class="pph">'+ (p.img?'<img loading="lazy" src="'+esc(p.img)+'" alt="'+esc(p.name)+'">':'') +'</div>'+
+    '<div class="pinfo"><span class="tag">'+(i===0?'Ready to Serve':'For the Crowd')+'</span><h3>'+esc(p.name)+'</h3>'+
+    (p.desc?'<p>'+esc(p.desc)+'</p>':'')+'<span class="ptag">'+money(p.price)+'</span></div></a>').join('');
+}).catch(()=>{
+  document.getElementById('menuWrap').innerHTML = '<p style="text-align:center;color:var(--ink-soft)">Could not load the menu — please refresh, or call 845.783.2700.</p>';
+});
 </script>
 </body>
 </html>

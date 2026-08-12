@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — The Baker's Pantry</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='%231d3557'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='%23c9a45c' font-family='Georgia' font-style='italic'>B</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#1d3557;--navy-deep:#152741;--gold:#c9a45c;--gold-soft:#dcc08a;--cream:#faf6ef;--ink:#22314a;--ink-soft:#5b6a83;--ok:#2c7a4b;--bad:#a33}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:'Playfair Display',serif;color:var(--navy);font-weight:500}
+button{font-family:'Jost',sans-serif;cursor:pointer}
+input,select,textarea{font-family:'Jost',sans-serif;font-size:.95rem;padding:9px 11px;border:1px solid #d8d2c4;background:#fff;outline:none;width:100%}
+input:focus,select:focus,textarea:focus{border-color:var(--gold)}
+.top{background:var(--navy);color:#fff;padding:14px 22px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.top .t{font-family:'Playfair Display',serif;font-size:1.15rem}
+.top button{background:none;border:1px solid rgba(255,255,255,.35);color:#fff;padding:7px 14px;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase}
+.wrap{max-width:1100px;margin:0 auto;padding:26px 20px 80px}
+.tabs{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap}
+.tabs button{background:#fff;border:1px solid #d8d2c4;padding:10px 20px;font-size:.74rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft)}
+.tabs button.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.pane{display:none}.pane.on{display:block}
+.card{background:#fff;box-shadow:0 10px 30px -18px rgba(21,39,65,.25);padding:20px;margin-bottom:16px}
+.badge{display:inline-block;font-size:.66rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;padding:3px 10px}
+.badge.new{background:#eaf3ff;color:#215a9c}.badge.done{background:#e9f5ee;color:var(--ok)}
+.order-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.order-head .oid{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--navy)}
+.order-items{margin:12px 0;border-top:1px dashed #e2dcce;padding-top:10px;font-size:.94rem}
+.order-cust{font-size:.9rem;color:var(--ink-soft)}
+.oactions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.btn{border:none;padding:9px 16px;font-size:.72rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase}
+.btn.navy{background:var(--navy);color:#fff}.btn.gold{background:var(--gold);color:var(--navy-deep)}
+.btn.ghost{background:#fff;border:1px solid #d8d2c4;color:var(--ink-soft)}
+.btn.red{background:#fff;border:1px solid #e5c0c0;color:var(--bad)}
+table{width:100%;border-collapse:collapse;background:#fff;box-shadow:0 10px 30px -18px rgba(21,39,65,.25)}
+th{font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft);text-align:left;padding:12px 12px;border-bottom:2px solid #eee6d8}
+td{padding:10px 12px;border-bottom:1px solid #f2ecdf;font-size:.92rem;vertical-align:middle}
+td img{width:46px;height:46px;object-fit:cover}
+td .noimg{width:46px;height:46px;background:var(--cream);display:flex;align-items:center;justify-content:center;color:var(--gold);font-family:'Playfair Display',serif;font-style:italic}
+.formgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;align-items:end}
+.formgrid label{display:block;font-size:.64rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--navy);margin-bottom:5px}
+.hintline{font-size:.82rem;color:var(--ink-soft);margin-top:10px}
+.msg{margin-top:10px;font-size:.9rem}.msg.ok{color:var(--ok)}.msg.err{color:var(--bad)}
+.login{max-width:380px;margin:12vh auto;background:#fff;box-shadow:0 18px 50px -24px rgba(21,39,65,.35);padding:40px 34px;text-align:center}
+.login h1{margin-bottom:18px}
+.login button{width:100%;margin-top:14px}
+.empty{color:var(--ink-soft);padding:30px;text-align:center}
+.chk{display:flex;align-items:center;gap:8px}
+.chk input{width:auto}
+@media(max-width:760px){table{display:block;overflow-x:auto}}
+</style>
+</head>
+<body>
+
+<div id="loginView" class="login" style="display:none">
+  <h1>The Baker's Pantry</h1>
+  <p style="color:var(--ink-soft);margin-bottom:16px">Admin sign-in</p>
+  <input type="password" id="pw" placeholder="Password">
+  <button class="btn navy" id="loginBtn">Sign In</button>
+  <div class="msg err" id="loginMsg"></div>
+</div>
+
+<div id="app" style="display:none">
+  <div class="top">
+    <span class="t">The Baker's Pantry — Admin</span>
+    <div style="display:flex;gap:8px">
+      <button onclick="location.href='/'">View Site</button>
+      <button id="logoutBtn">Log Out</button>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="tabs">
+      <button data-t="orders" class="on">Orders <span id="newCount"></span></button>
+      <button data-t="products">Products</button>
+      <button data-t="settings">Settings</button>
+    </div>
+
+    <div class="pane on" id="pane-orders"><div class="empty">Loading…</div></div>
+
+    <div class="pane" id="pane-products">
+      <div class="card">
+        <h3 style="margin-bottom:12px">Add a Product</h3>
+        <div class="formgrid">
+          <div style="grid-column:span 2"><label>Name</label><input id="npName"></div>
+          <div><label>Category</label><select id="npCat"></select></div>
+          <div><label>Price ($)</label><input id="npPrice" inputmode="numeric"></div>
+          <div><label>Per (e.g. 12 pcs)</label><input id="npPer" placeholder="leave empty for each"></div>
+        </div>
+        <div class="formgrid" style="margin-top:12px">
+          <div style="grid-column:span 2"><label>Image URL (or upload →)</label><input id="npImg" placeholder="images/… or https://…"></div>
+          <div><label>Upload Photo</label><input type="file" id="npFile" accept="image/*"></div>
+          <div class="chk"><input type="checkbox" id="npFav"><label style="margin:0">Show in Favorites</label></div>
+        </div>
+        <div style="margin-top:14px"><button class="btn gold" id="npAdd">Add Product</button><span class="msg" id="npMsg"></span></div>
+        <div class="hintline">New products show up on the shop right away, and on the front page under their category. If a photo is missing, the site shows an elegant "photo coming soon" card.</div>
+      </div>
+      <div id="prodTable"></div>
+    </div>
+
+    <div class="pane" id="pane-settings">
+      <div class="card">
+        <h3 style="margin-bottom:12px">Order Notifications</h3>
+        <p style="font-size:.92rem;color:var(--ink-soft);margin-bottom:12px">Every new order is saved here in the Orders tab. To ALSO get an email for each new order, enter the email address below.</p>
+        <div class="formgrid">
+          <div style="grid-column:span 2"><label>Notification Email</label><input id="setEmail" inputmode="email" placeholder="you@example.com"></div>
+          <div><button class="btn navy" id="setSave">Save</button></div>
+          <div><button class="btn ghost" id="setTest">Send Test Email</button></div>
+        </div>
+        <div class="msg" id="setMsg"></div>
+        <div class="hintline"><b>One-time step:</b> the very first email arrives from FormSubmit and asks you to confirm — click the button in that email once, and all future order emails come through automatically.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+let PRODUCTS = [], CATS = [];
+
+async function api(path, opts={}){
+  const r = await fetch(path, {headers:{'content-type':'application/json'}, ...opts});
+  if (r.status === 401){ showLogin(); throw new Error('unauthorized'); }
+  return r.json();
+}
+
+function showLogin(){ $('#loginView').style.display='block'; $('#app').style.display='none'; }
+function showApp(){ $('#loginView').style.display='none'; $('#app').style.display='block'; loadAll(); }
+
+$('#loginBtn').onclick = async () => {
+  const r = await fetch('/api/admin/login', {method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify({password: $('#pw').value})});
+  if (r.ok) showApp(); else $('#loginMsg').textContent = 'Wrong password.';
+};
+$('#pw').addEventListener('keydown', e => { if (e.key==='Enter') $('#loginBtn').click(); });
+$('#logoutBtn').onclick = async () => { await fetch('/api/admin/logout', {method:'POST'}); showLogin(); };
+
+document.querySelectorAll('.tabs button').forEach(b => b.onclick = () => {
+  document.querySelectorAll('.tabs button').forEach(x=>x.classList.remove('on'));
+  document.querySelectorAll('.pane').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on'); $('#pane-'+b.dataset.t).classList.add('on');
+});
+
+/* ---------- orders ---------- */
+async function loadOrders(){
+  const d = await api('/api/admin/orders');
+  const pane = $('#pane-orders');
+  if (!d.orders.length){ pane.innerHTML = '<div class="empty">No orders yet. When someone orders on the shop page, it shows up here.</div>'; $('#newCount').textContent=''; return; }
+  const news = d.orders.filter(o=>o.status==='new').length;
+  $('#newCount').textContent = news ? '('+news+' new)' : '';
+  pane.innerHTML = d.orders.map(o => `
+    <div class="card">
+      <div class="order-head">
+        <span class="oid">${o.id}</span>
+        <span>${new Date(o.created).toLocaleString()}</span>
+        <span class="badge ${o.status}">${o.status}</span>
+        <b>$${o.total}</b>
+      </div>
+      <div class="order-items">${o.items.map(i=>`${i.qty} × ${i.name} — $${i.price*i.qty}`).join('<br>')}</div>
+      <div class="order-cust">
+        <b>${o.customer.name}</b> · <a href="tel:${o.customer.phone}">${o.customer.phone}</a>
+        ${o.customer.email?' · '+o.customer.email:''}
+        ${o.customer.pickup?'<br>Pickup: '+o.customer.pickup:''}
+        ${o.customer.note?'<br>Note: '+o.customer.note:''}
+      </div>
+      <div class="oactions">
+        ${o.status==='new'
+          ? `<button class="btn navy" onclick="setStatus('${o._key}','done')">Mark Done</button>`
+          : `<button class="btn ghost" onclick="setStatus('${o._key}','new')">Mark New</button>`}
+        <button class="btn red" onclick="delOrder('${o._key}')">Delete</button>
+      </div>
+    </div>`).join('');
+}
+window.setStatus = async (key, status) => { await api('/api/admin/order-update',{method:'POST',body:JSON.stringify({key,status})}); loadOrders(); };
+window.delOrder = async (key) => { if (confirm('Delete this order?')){ await api('/api/admin/order-update',{method:'POST',body:JSON.stringify({key,action:'delete'})}); loadOrders(); } };
+
+/* ---------- products ---------- */
+async function loadProducts(){
+  const d = await fetch('/api/products').then(r=>r.json());
+  PRODUCTS = d.products; CATS = d.cats;
+  $('#npCat').innerHTML = CATS.map(c=>`<option value="${c.key}">${c.name}</option>`).join('');
+  renderProducts();
+}
+function renderProducts(){
+  $('#prodTable').innerHTML = '<table><tr><th></th><th>Name</th><th>Category</th><th>Price</th><th>Per</th><th>Fav</th><th></th></tr>' +
+    PRODUCTS.map((p,i)=>`<tr>
+      <td>${p.img?`<img src="${p.img}">`:'<div class="noimg">'+p.name[0]+'</div>'}</td>
+      <td>${p.name}</td>
+      <td>${(CATS.find(c=>c.key===p.cat)||{}).name||p.cat}</td>
+      <td><input style="width:70px" value="${p.price}" onchange="PRODUCTS[${i}].price=this.value;saveProducts()"></td>
+      <td><input style="width:80px" value="${p.per||''}" onchange="PRODUCTS[${i}].per=this.value;saveProducts()"></td>
+      <td style="text-align:center"><input type="checkbox" ${p.fav?'checked':''} onchange="PRODUCTS[${i}].fav=this.checked;saveProducts()"></td>
+      <td><button class="btn red" onclick="removeProduct(${i})">Remove</button></td>
+    </tr>`).join('') + '</table>';
+}
+window.removeProduct = async (i) => {
+  if (!confirm('Remove "'+PRODUCTS[i].name+'" from the site and shop?')) return;
+  PRODUCTS.splice(i,1); await saveProducts();
+};
+window.saveProducts = async () => {
+  await api('/api/admin/products',{method:'POST',body:JSON.stringify({products:PRODUCTS})});
+  const d = await fetch('/api/products').then(r=>r.json()); PRODUCTS = d.products; renderProducts();
+};
+$('#npAdd').onclick = async () => {
+  const msg = $('#npMsg');
+  const name = $('#npName').value.trim();
+  const price = parseInt($('#npPrice').value);
+  if (!name || !price){ msg.className='msg err'; msg.textContent='Name and price are required.'; return; }
+  let img = $('#npImg').value.trim() || null;
+  const f = $('#npFile').files[0];
+  try{
+    if (f){
+      msg.className='msg'; msg.textContent='Uploading photo…';
+      const up = await fetch('/api/admin/upload', {method:'POST', headers:{'content-type':f.type}, body:f});
+      const ud = await up.json();
+      if (!up.ok) throw new Error(ud.error||'upload failed');
+      img = ud.url;
+    }
+    PRODUCTS.push({name, cat: $('#npCat').value, price, per: $('#npPer').value.trim(), img, fav: $('#npFav').checked});
+    await saveProducts();
+    msg.className='msg ok'; msg.textContent='Added! It\'s live on the shop now.';
+    $('#npName').value=$('#npPrice').value=$('#npPer').value=$('#npImg').value=''; $('#npFile').value=''; $('#npFav').checked=false;
+  }catch(e){ msg.className='msg err'; msg.textContent=e.message; }
+};
+
+/* ---------- settings ---------- */
+async function loadSettings(){
+  const d = await api('/api/admin/settings');
+  $('#setEmail').value = d.notifyEmail || '';
+}
+$('#setSave').onclick = async () => {
+  const d = await api('/api/admin/settings',{method:'POST',body:JSON.stringify({notifyEmail:$('#setEmail').value.trim()})});
+  const m = $('#setMsg'); m.className='msg ok'; m.textContent = d.notifyEmail ? 'Saved — orders will be emailed to '+d.notifyEmail : 'Saved — email notifications are off.';
+};
+$('#setTest').onclick = async () => {
+  const m = $('#setMsg'); m.className='msg'; m.textContent='Sending…';
+  const d = await api('/api/admin/test-email',{method:'POST'});
+  m.className = d.sent ? 'msg ok' : 'msg err';
+  m.textContent = d.sent ? 'Test sent! Check your inbox (first time: click the FormSubmit confirmation).' : 'Could not send: '+(d.reason||d.status||'is an email saved?');
+};
+
+function loadAll(){ loadOrders(); loadProducts(); loadSettings(); }
+
+/* boot */
+fetch('/api/admin/me').then(r => { if (r.ok) showApp(); else showLogin(); });
+</script>
+</body>
+</html>
