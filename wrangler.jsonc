@@ -6,6 +6,10 @@
     "directory": "./site",
     "binding": "ASSETS"
   },
+  "routes": [
+    { "pattern": "bakerspantryny.com", "custom_domain": true },
+    { "pattern": "www.bakerspantryny.com", "custom_domain": true }
+  ],
   "kv_namespaces": [
     {
       "binding": "BP_KV",
