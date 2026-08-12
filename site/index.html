@@ -9,7 +9,7 @@
 <meta property="og:description" content="Handcrafted cheesecakes, babkas, tarts &amp; dairy delights. Order online for pickup in Monroe.">
 <meta property="og:image" content="images/hero.jpg">
 <meta property="og:type" content="website">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='%231d3557'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='%23c9a45c' font-family='Georgia' font-style='italic'>B</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%23f6e7bb'/><stop offset='.5' stop-color='%23d4af63'/><stop offset='1' stop-color='%239c7a3c'/></linearGradient></defs><rect width='100' height='100' rx='14' fill='%231d3557'/><rect x='6' y='6' width='88' height='88' rx='9' fill='none' stroke='url(%23g)' stroke-width='4'/><rect x='15' y='15' width='70' height='70' rx='5' fill='none' stroke='url(%23g)' stroke-width='1.5'/><text x='50' y='67' font-size='42' text-anchor='middle' fill='url(%23g)' font-family='Georgia' font-style='italic'>BP</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -28,7 +28,12 @@
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{font-family:'Jost',sans-serif;color:var(--ink);background:var(--cream);line-height:1.6;-webkit-font-smoothing:antialiased}
+body{font-family:'Jost',sans-serif;color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;
+  background:
+    radial-gradient(55% 42% at 12% 18%, rgba(244,220,180,.55), transparent 70%),
+    radial-gradient(48% 38% at 88% 8%, rgba(236,205,185,.5), transparent 70%),
+    radial-gradient(60% 45% at 82% 85%, rgba(240,216,170,.4), transparent 70%),
+    linear-gradient(160deg,#faf6ef 0%,#f4e9da 45%,#f8f0e2 100%)}
 img{max-width:100%;display:block}
 a{color:inherit;text-decoration:none}
 h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.12;font-weight:500}
@@ -54,9 +59,19 @@ header{position:sticky;top:0;z-index:60;background:var(--navy);box-shadow:0 2px 
 
 /* ---------- Hero ---------- */
 .hero{position:relative;min-height:92vh;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;color:#fff}
-.hero .bg{position:absolute;inset:0;background:url('images/hero.jpg') center/cover no-repeat;animation:heroZoom 9s ease-out forwards}
-@keyframes heroZoom{from{transform:scale(1.09)}to{transform:scale(1)}}
-.hero .veil{position:absolute;inset:0;background:linear-gradient(180deg,rgba(16,28,50,.72) 0%,rgba(16,28,50,.45) 45%,rgba(16,28,50,.72) 100%)}
+.hero .slide{position:absolute;inset:0;background-position:center;background-size:cover;opacity:0;transition:opacity 1.4s ease}
+.hero .slide.on{opacity:1;animation:heroZoom 8s ease-out forwards}
+@keyframes heroZoom{from{transform:scale(1.08)}to{transform:scale(1)}}
+.hero .veil{position:absolute;inset:0;background:linear-gradient(180deg,rgba(16,28,50,.72) 0%,rgba(16,28,50,.42) 45%,rgba(16,28,50,.72) 100%)}
+.hero-dots{position:absolute;bottom:64px;left:50%;transform:translateX(-50%);z-index:3;display:flex;gap:10px}
+.hero-dots button{width:9px;height:9px;border-radius:50%;border:1px solid rgba(243,224,174,.8);background:transparent;cursor:pointer;padding:0;transition:background .3s}
+.hero-dots button.on{background:var(--gold-soft)}
+/* ---------- Gold accents ---------- */
+.gold-strip{height:3px;background:linear-gradient(90deg,#8f7136,#d4af63,#f3e0ae,#d4af63,#8f7136);background-size:200% 100%;animation:goldSlide 5s linear infinite}
+@keyframes goldSlide{from{background-position:0% 0}to{background-position:200% 0}}
+.gtext{background:linear-gradient(100deg,#c9a45c 25%,#f6e7bb 45%,#c9a45c 65%);background-size:220% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:goldSlide 7s linear infinite}
+.hero h1.sheen{background:linear-gradient(102deg,#ffffff 30%,#f6e7bb 50%,#ffffff 68%);background-size:230% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:goldSlide 8s linear infinite}
+.sec-head h2::after{content:"";display:block;width:110px;height:2px;margin:16px auto 0;background:linear-gradient(90deg,transparent,#d4af63 30%,#f3e0ae 50%,#d4af63 70%,transparent);background-size:200% 100%;animation:goldSlide 5s linear infinite}
 .hero-inner{position:relative;z-index:2;padding:90px 24px 70px;max-width:900px}
 .monogram{width:120px;height:120px;margin:0 auto 34px;display:block;filter:drop-shadow(0 10px 24px rgba(0,0,0,.35))}
 .hero .eyebrow{color:var(--gold-soft);display:block;margin-bottom:14px}
@@ -85,9 +100,12 @@ section{padding:92px 24px}
 @media(max-width:900px){.trio{grid-template-columns:1fr}}
 
 /* ---------- Favorites carousel ---------- */
-.favs{background:var(--navy);color:#fff}
+.favs{background:
+  radial-gradient(55% 60% at 15% 15%, rgba(201,164,92,.22), transparent 70%),
+  radial-gradient(50% 55% at 88% 90%, rgba(29,53,87,.5), transparent 72%),
+  linear-gradient(160deg,#382514 0%,#5a3a1e 55%,#382514 100%);color:#fff}
 .favs .sec-head h2{color:#fff}
-.favs .sec-head p{color:#c3cede}
+.favs .sec-head p{color:#e2d3bd}
 .rail{display:flex;gap:24px;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 6px 26px;scrollbar-width:thin;scrollbar-color:var(--gold) rgba(255,255,255,.12)}
 .rail::-webkit-scrollbar{height:8px}
 .rail::-webkit-scrollbar-track{background:rgba(255,255,255,.1)}
@@ -113,12 +131,15 @@ section{padding:92px 24px}
 @media(max-width:900px){.tiles{grid-template-columns:1fr}.tile{min-height:280px}}
 
 /* ---------- Story ---------- */
-.story{background:var(--cream-deep)}
+.story{background:
+  radial-gradient(50% 55% at 85% 15%, rgba(201,164,92,.24), transparent 70%),
+  radial-gradient(55% 50% at 8% 88%, rgba(236,205,185,.55), transparent 70%),
+  linear-gradient(150deg,#f2ead9 0%,#f7ecd8 50%,#efe0c8 100%)}
 .story .wrap{display:grid;grid-template-columns:1.15fr .85fr;gap:64px;align-items:center;max-width:1180px}
 .story h2{font-size:clamp(2rem,3.6vw,2.8rem);color:var(--navy);margin:12px 0 20px}
 .story p{color:var(--ink-soft);margin-bottom:16px;font-weight:300;font-size:1.03rem}
 .stats{display:grid;grid-template-columns:1fr 1fr;gap:24px}
-.stat{background:#fff;padding:30px 24px;text-align:center;box-shadow:0 14px 36px -22px rgba(21,39,65,.25)}
+.stat{background:linear-gradient(170deg,#ffffff 0%,#faf1de 100%);border-top:3px solid var(--gold);padding:30px 24px;text-align:center;box-shadow:0 14px 36px -22px rgba(21,39,65,.25)}
 .stat .n{font-family:'Playfair Display',serif;font-size:2.2rem;color:var(--gold)}
 .stat .l{font-size:.68rem;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--navy);margin-top:6px}
 @media(max-width:900px){.story .wrap{grid-template-columns:1fr;gap:40px}}
@@ -136,7 +157,10 @@ section{padding:92px 24px}
 .card .ph{aspect-ratio:1.06;overflow:hidden;background:#fff}
 .card .ph img{width:100%;height:100%;object-fit:cover;transition:transform .45s}
 .card:hover .ph img{transform:scale(1.08)}
-.card .ph.noimg{background:linear-gradient(160deg,var(--cream) 0%,var(--cream-deep) 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+.card .ph.noimg{background:
+  radial-gradient(60% 55% at 25% 22%, rgba(246,231,187,.9), transparent 72%),
+  radial-gradient(55% 60% at 80% 85%, rgba(214,178,116,.45), transparent 70%),
+  linear-gradient(160deg,#faf3e3 0%,#eeddc0 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
 .card .ph.noimg .mono{font-family:'Playfair Display',serif;font-style:italic;font-size:3rem;color:rgba(201,164,92,.5)}
 .card .ph.noimg .mlabel{font-size:.66rem;letter-spacing:.26em;text-transform:uppercase;color:rgba(34,49,74,.42);font-weight:600}
 .card .info{padding:16px 18px 18px;display:flex;justify-content:space-between;align-items:baseline;gap:10px}
@@ -160,7 +184,10 @@ section{padding:92px 24px}
 @media(max-width:900px){.platter-grid{grid-template-columns:1fr}.platter{grid-template-columns:1fr}.platter .pph img{max-height:250px}}
 
 /* ---------- Visit ---------- */
-.visit{background:var(--cream-deep)}
+.visit{background:
+  radial-gradient(50% 55% at 12% 20%, rgba(201,164,92,.22), transparent 70%),
+  radial-gradient(55% 50% at 90% 85%, rgba(236,205,185,.5), transparent 70%),
+  linear-gradient(200deg,#f2ead9 0%,#f8eeda 55%,#efe0c8 100%)}
 .visit-card{max-width:720px;margin:0 auto;background:#fff;box-shadow:0 18px 50px -24px rgba(21,39,65,.3);padding:52px 46px;text-align:center;position:relative}
 .visit-card::before{content:"";position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(90deg,var(--navy),var(--gold))}
 .visit-card .num{font-family:'Playfair Display',serif;font-size:1rem;color:var(--gold);letter-spacing:.2em}
@@ -171,7 +198,10 @@ section{padding:92px 24px}
 .visit-card .vlinks{margin-top:24px;display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
 
 /* ---------- Order band ---------- */
-.band{background:var(--navy);color:#fff;text-align:center;padding:80px 24px}
+.band{background:
+  radial-gradient(60% 70% at 20% 20%, rgba(201,164,92,.28), transparent 70%),
+  radial-gradient(50% 60% at 85% 80%, rgba(29,53,87,.45), transparent 72%),
+  linear-gradient(135deg,#382514 0%,#6b4a26 50%,#382514 100%);color:#fff;text-align:center;padding:80px 24px}
 .band .eyebrow{color:var(--gold-soft)}
 .band h2{font-size:clamp(1.9rem,3.6vw,2.7rem);color:#fff;margin:12px 0 10px}
 .band p{color:#c3cede;font-weight:300;max-width:32rem;margin:0 auto 28px}
@@ -203,8 +233,8 @@ footer{background:var(--navy-deep);color:#b9c4d6;padding:70px 24px 34px;font-wei
 <header>
   <nav class="nav">
     <a href="#top" class="nav-brand">
-      <svg class="mini-mono" viewBox="0 0 100 100"><rect x="2" y="2" width="96" height="96" fill="none" stroke="#c9a45c" stroke-width="2.5"/><rect x="9" y="9" width="82" height="82" fill="none" stroke="#c9a45c" stroke-width="1"/><text x="50" y="66" text-anchor="middle" font-family="Playfair Display,Georgia,serif" font-style="italic" font-size="44" fill="#c9a45c">BP</text></svg>
-      <span class="nm">The Baker's Pantry</span>
+      <svg class="mini-mono" viewBox="0 0 120 120"><defs><linearGradient id="gg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f6e7bb"/><stop offset=".45" stop-color="#d4af63"/><stop offset=".75" stop-color="#9c7a3c"/><stop offset="1" stop-color="#eed9a4"/></linearGradient></defs><rect x="3" y="3" width="114" height="114" fill="none" stroke="url(#gg)" stroke-width="3"/><rect x="13" y="13" width="94" height="94" fill="none" stroke="url(#gg)" stroke-width="1.2"/><path d="M13 32 Q13 13 32 13" fill="none" stroke="url(#gg)" stroke-width="2.2"/><path d="M88 13 Q107 13 107 32" fill="none" stroke="url(#gg)" stroke-width="2.2"/><path d="M107 88 Q107 107 88 107" fill="none" stroke="url(#gg)" stroke-width="2.2"/><path d="M32 107 Q13 107 13 88" fill="none" stroke="url(#gg)" stroke-width="2.2"/><path d="M60 2 L65 8 L60 14 L55 8 Z" fill="url(#gg)"/><path d="M60 106 L65 112 L60 118 L55 112 Z" fill="url(#gg)"/><text x="60" y="75" text-anchor="middle" font-family="Playfair Display,Georgia,serif" font-style="italic" font-size="46" fill="url(#gg)">BP</text></svg>
+      <span class="nm gtext">The Baker's Pantry</span>
     </a>
     <div class="nav-links">
       <a href="#top">Home</a>
@@ -219,18 +249,31 @@ footer{background:var(--navy-deep);color:#b9c4d6;padding:70px 24px 34px;font-wei
 
 <!-- ================= HERO ================= -->
 <div class="hero" id="top">
-  <div class="bg"></div>
+  <div class="slide on" style="background-image:url('images/hero.jpg')"></div>
+  <div class="slide" style="background-image:url('images/hero-2.jpg')"></div>
+  <div class="slide" style="background-image:url('images/hero-3.jpg')"></div>
+  <div class="slide" style="background-image:url('images/hero-4.jpg')"></div>
   <div class="veil"></div>
+  <div class="hero-dots" id="heroDots"></div>
   <div class="hero-inner">
     <svg class="monogram" viewBox="0 0 120 120">
-      <rect x="2" y="2" width="116" height="116" fill="rgba(21,39,65,.55)" stroke="#c9a45c" stroke-width="2.5"/>
-      <rect x="10" y="10" width="100" height="100" fill="none" stroke="#c9a45c" stroke-width="1"/>
-      <line x1="24" y1="22" x2="96" y2="22" stroke="#c9a45c" stroke-width="1"/>
-      <line x1="24" y1="98" x2="96" y2="98" stroke="#c9a45c" stroke-width="1"/>
-      <text x="60" y="76" text-anchor="middle" font-family="Playfair Display,Georgia,serif" font-style="italic" font-size="46" fill="#c9a45c">BP</text>
+      <defs><linearGradient id="gg2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f6e7bb"/><stop offset=".45" stop-color="#d4af63"/><stop offset=".75" stop-color="#9c7a3c"/><stop offset="1" stop-color="#eed9a4"/></linearGradient></defs>
+      <rect x="3" y="3" width="114" height="114" fill="rgba(21,39,65,.55)" stroke="url(#gg2)" stroke-width="3"/>
+      <rect x="13" y="13" width="94" height="94" fill="none" stroke="url(#gg2)" stroke-width="1.2"/>
+      <path d="M13 32 Q13 13 32 13" fill="none" stroke="url(#gg2)" stroke-width="2.2"/>
+      <path d="M88 13 Q107 13 107 32" fill="none" stroke="url(#gg2)" stroke-width="2.2"/>
+      <path d="M107 88 Q107 107 88 107" fill="none" stroke="url(#gg2)" stroke-width="2.2"/>
+      <path d="M32 107 Q13 107 13 88" fill="none" stroke="url(#gg2)" stroke-width="2.2"/>
+      <path d="M60 2 L65 8 L60 14 L55 8 Z" fill="url(#gg2)"/>
+      <path d="M60 106 L65 112 L60 118 L55 112 Z" fill="url(#gg2)"/>
+      <line x1="26" y1="24" x2="48" y2="24" stroke="url(#gg2)" stroke-width="1"/>
+      <line x1="72" y1="24" x2="94" y2="24" stroke="url(#gg2)" stroke-width="1"/>
+      <line x1="26" y1="96" x2="48" y2="96" stroke="url(#gg2)" stroke-width="1"/>
+      <line x1="72" y1="96" x2="94" y2="96" stroke="url(#gg2)" stroke-width="1"/>
+      <text x="60" y="75" text-anchor="middle" font-family="Playfair Display,Georgia,serif" font-style="italic" font-size="46" fill="url(#gg2)">BP</text>
     </svg>
     <span class="eyebrow">Artisan Cheese Cakes, Babkas &amp; Dairy Delights</span>
-    <h1>The Baker's Pantry</h1>
+    <h1 class="sheen">The Baker's Pantry</h1>
     <p class="lead">Silky cheesecakes, cream-crowned babkas, and petite dairy treats — handcrafted in small batches and finished by hand in Monroe, New York.</p>
     <div class="hero-ctas">
       <a class="btn-navy" href="#menu">View Menu</a>
@@ -240,6 +283,7 @@ footer{background:var(--navy-deep);color:#b9c4d6;padding:70px 24px 34px;font-wei
   </div>
   <span class="scroll-hint">Scroll</span>
 </div>
+<div class="gold-strip"></div>
 
 <!-- ================= SIGNATURE TRIO ================= -->
 <section>
@@ -254,6 +298,7 @@ footer{background:var(--navy-deep);color:#b9c4d6;padding:70px 24px 34px;font-wei
 </section>
 
 <!-- ================= FAVORITES ================= -->
+<div class="gold-strip"></div>
 <section class="favs" id="favorites">
   <div class="wrap">
     <div class="sec-head">
@@ -264,6 +309,7 @@ footer{background:var(--navy-deep);color:#b9c4d6;padding:70px 24px 34px;font-wei
     <div class="rail" id="favRail"></div>
   </div>
 </section>
+<div class="gold-strip"></div>
 
 <!-- ================= CATEGORY TILES ================= -->
 <section>
@@ -346,6 +392,7 @@ footer{background:var(--navy-deep);color:#b9c4d6;padding:70px 24px 34px;font-wei
 </section>
 
 <!-- ================= ORDER BAND ================= -->
+<div class="gold-strip"></div>
 <section class="band" style="padding:80px 24px">
   <span class="eyebrow">We'd Love to Bake for You</span>
   <h2>Place Your Order</h2>
@@ -354,14 +401,15 @@ footer{background:var(--navy-deep);color:#b9c4d6;padding:70px 24px 34px;font-wei
   <div class="or">or call</div>
   <a class="phone-big" href="tel:+18457832700">845.783.2700</a>
 </section>
+<div class="gold-strip"></div>
 
 <!-- ================= FOOTER ================= -->
 <footer>
   <div class="foot">
     <div class="fb">
       <div class="fbrand">
-        <svg viewBox="0 0 100 100"><rect x="2" y="2" width="96" height="96" fill="none" stroke="#c9a45c" stroke-width="2.5"/><rect x="9" y="9" width="82" height="82" fill="none" stroke="#c9a45c" stroke-width="1"/><text x="50" y="66" text-anchor="middle" font-family="Playfair Display,Georgia,serif" font-style="italic" font-size="44" fill="#c9a45c">BP</text></svg>
-        <span class="nm">The Baker's Pantry</span>
+        <svg viewBox="0 0 120 120"><defs><linearGradient id="gg3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f6e7bb"/><stop offset=".45" stop-color="#d4af63"/><stop offset=".75" stop-color="#9c7a3c"/><stop offset="1" stop-color="#eed9a4"/></linearGradient></defs><rect x="3" y="3" width="114" height="114" fill="none" stroke="url(#gg3)" stroke-width="3"/><rect x="13" y="13" width="94" height="94" fill="none" stroke="url(#gg3)" stroke-width="1.2"/><path d="M13 32 Q13 13 32 13" fill="none" stroke="url(#gg3)" stroke-width="2.2"/><path d="M88 13 Q107 13 107 32" fill="none" stroke="url(#gg3)" stroke-width="2.2"/><path d="M107 88 Q107 107 88 107" fill="none" stroke="url(#gg3)" stroke-width="2.2"/><path d="M32 107 Q13 107 13 88" fill="none" stroke="url(#gg3)" stroke-width="2.2"/><path d="M60 2 L65 8 L60 14 L55 8 Z" fill="url(#gg3)"/><path d="M60 106 L65 112 L60 118 L55 112 Z" fill="url(#gg3)"/><text x="60" y="75" text-anchor="middle" font-family="Playfair Display,Georgia,serif" font-style="italic" font-size="46" fill="url(#gg3)">BP</text></svg>
+        <span class="nm gtext">The Baker's Pantry</span>
       </div>
       <p>Handcrafted cheesecakes, cream-topped babkas, tarts and petite dairy treats — baked fresh in small batches in Monroe, New York.</p>
     </div>
@@ -418,6 +466,21 @@ footer{background:var(--navy-deep);color:#b9c4d6;padding:70px 24px 34px;font-wei
 </script>
 <script>
 document.getElementById('yr').textContent = new Date().getFullYear();
+
+/* hero slideshow — crossfade every 4 seconds */
+(function(){
+  const slides = [...document.querySelectorAll('.hero .slide')];
+  const dots = document.getElementById('heroDots');
+  slides.forEach((s,i)=>{ const b=document.createElement('button'); if(i===0)b.classList.add('on'); b.onclick=()=>go(i); dots.appendChild(b); });
+  let cur = 0, timer = setInterval(()=>go(cur+1), 4000);
+  function go(n){
+    slides[cur].classList.remove('on'); dots.children[cur].classList.remove('on');
+    cur = n % slides.length;
+    slides[cur].classList.add('on'); dots.children[cur].classList.add('on');
+  }
+  dots.addEventListener('click', ()=>{ clearInterval(timer); timer = setInterval(()=>go(cur+1), 4000); });
+})();
+
 const money = n => '$' + n;
 const shopLink = p => '/shop#item-' + p.slug;
 const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
