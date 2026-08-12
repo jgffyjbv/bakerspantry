@@ -44,7 +44,11 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.12;font-weight:500}
 .sec-head p{color:var(--ink-soft);font-size:1.04rem;font-weight:300}
 
 /* ---------- Nav ---------- */
-header{position:sticky;top:0;z-index:60;background:var(--navy);box-shadow:0 2px 18px rgba(13,25,45,.35)}
+header{position:fixed;top:0;left:0;right:0;z-index:60;background:linear-gradient(180deg,rgba(12,16,26,.6) 0%,rgba(12,16,26,0) 100%);transition:background .45s ease,box-shadow .45s ease}
+header.scrolled{background:rgba(28,20,11,.82);backdrop-filter:blur(16px) saturate(1.2);-webkit-backdrop-filter:blur(16px) saturate(1.2);box-shadow:0 10px 34px -14px rgba(8,6,3,.55)}
+header::after{content:"";position:absolute;left:0;right:0;bottom:-3px;height:3px;background:linear-gradient(90deg,#8f7136,#d4af63,#f3e0ae,#d4af63,#8f7136);background-size:200% 100%;animation:goldSlide 5s linear infinite;opacity:0;transition:opacity .45s}
+header.scrolled::after{opacity:1}
+section,.hero{scroll-margin-top:70px}
 .nav{max-width:1280px;margin:0 auto;padding:0 26px;height:66px;display:flex;align-items:center;justify-content:space-between;gap:18px}
 .nav-brand{display:flex;align-items:center;gap:12px;color:#fff}
 .nav-brand .mini-mono{width:38px;height:38px;flex:none}
@@ -72,7 +76,7 @@ header{position:sticky;top:0;z-index:60;background:var(--navy);box-shadow:0 2px 
 .gtext{background:linear-gradient(100deg,#c9a45c 25%,#f6e7bb 45%,#c9a45c 65%);background-size:220% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:goldSlide 7s linear infinite}
 .hero h1.sheen{background:linear-gradient(102deg,#ffffff 30%,#f6e7bb 50%,#ffffff 68%);background-size:230% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:goldSlide 8s linear infinite}
 .sec-head h2::after{content:"";display:block;width:110px;height:2px;margin:16px auto 0;background:linear-gradient(90deg,transparent,#d4af63 30%,#f3e0ae 50%,#d4af63 70%,transparent);background-size:200% 100%;animation:goldSlide 5s linear infinite}
-.hero-inner{position:relative;z-index:2;padding:90px 24px 70px;max-width:900px}
+.hero-inner{position:relative;z-index:2;padding:150px 24px 70px;max-width:900px}
 .monogram{width:120px;height:120px;margin:0 auto 34px;display:block;filter:drop-shadow(0 10px 24px rgba(0,0,0,.35))}
 .hero .eyebrow{color:var(--gold-soft);display:block;margin-bottom:14px}
 .hero h1{font-size:clamp(3rem,9vw,5.6rem);font-weight:500;color:#fff;margin-bottom:22px}
@@ -466,6 +470,13 @@ footer{background:var(--navy-deep);color:#b9c4d6;padding:70px 24px 34px;font-wei
 </script>
 <script>
 document.getElementById('yr').textContent = new Date().getFullYear();
+
+/* glass header on scroll */
+(function(){
+  const hdr = document.querySelector('header');
+  const onScroll = () => hdr.classList.toggle('scrolled', scrollY > 50);
+  addEventListener('scroll', onScroll, {passive:true}); onScroll();
+})();
 
 /* hero slideshow — crossfade every 4 seconds */
 (function(){
