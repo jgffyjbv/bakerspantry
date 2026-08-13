@@ -6,6 +6,11 @@ const CATS = [
   { key: "babkas", name: "Cream-Topped Babkas" },
   { key: "tarts", name: "Cheese Tarts" },
   { key: "dozen", name: "Treats by the Dozen" },
+  { key: "s-cakes", name: "Sukkos Collection · Cakes" },
+  { key: "s-logs", name: "Sukkos Collection · Chocolate Logs" },
+  { key: "s-ices", name: "Sukkos Collection · Ices" },
+  { key: "s-mini", name: "Sukkos Collection · Miniatures" },
+  { key: "s-cookies", name: "Sukkos Collection · Cookies" },
   { key: "platters", name: "Assorted Combo Platters" }
 ];
 
