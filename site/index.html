@@ -93,9 +93,9 @@ section,.hero{scroll-margin-top:70px}
 section{padding:92px 24px}
 .wrap{max-width:1280px;margin:0 auto}
 .trio{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;max-width:1120px;margin:0 auto}
-.trio-card{display:block;background:#fff;box-shadow:0 16px 44px -22px rgba(21,39,65,.28);transition:transform .25s,box-shadow .25s}
+.trio-card{display:block;background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 16px 44px -22px rgba(21,39,65,.28);transition:transform .25s,box-shadow .25s}
 .trio-card:hover{transform:translateY(-6px);box-shadow:0 26px 54px -24px rgba(21,39,65,.4)}
-.trio-card .ph{aspect-ratio:1.05;overflow:hidden}
+.trio-card .ph{aspect-ratio:16/11;overflow:hidden}
 .trio-card .ph img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
 .trio-card:hover .ph img{transform:scale(1.08)}
 .trio-card .tc{padding:24px 26px 28px;text-align:center}
@@ -114,8 +114,8 @@ section{padding:92px 24px}
 .rail::-webkit-scrollbar{height:8px}
 .rail::-webkit-scrollbar-track{background:rgba(255,255,255,.1)}
 .rail::-webkit-scrollbar-thumb{background:var(--gold)}
-.fav-card{display:block;flex:0 0 258px;scroll-snap-align:start;background:#fff;color:var(--ink)}
-.fav-card .ph{aspect-ratio:1;overflow:hidden}
+.fav-card{display:block;flex:0 0 300px;scroll-snap-align:start;background:#fff;color:var(--ink);border-radius:16px;overflow:hidden}
+.fav-card .ph{aspect-ratio:16/10;overflow:hidden}
 .fav-card .ph img{width:100%;height:100%;object-fit:cover;transition:transform .45s}
 .fav-card:hover .ph img{transform:scale(1.08)}
 .fav-card .fc{padding:16px 18px 20px;text-align:center}
@@ -125,7 +125,7 @@ section{padding:92px 24px}
 
 /* ---------- Category tiles ---------- */
 .tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:30px}
-.tile{position:relative;overflow:hidden;min-height:380px;display:flex;align-items:flex-end;color:#fff}
+.tile{position:relative;overflow:hidden;border-radius:18px;min-height:380px;display:flex;align-items:flex-end;color:#fff}
 .tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .6s}
 .tile:hover img{transform:scale(1.07)}
 .tile::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(16,28,50,0) 35%,rgba(16,28,50,.82) 100%)}
@@ -154,11 +154,11 @@ section{padding:92px 24px}
 .menu-cat h3{font-size:1.6rem;color:var(--navy);white-space:nowrap}
 .menu-cat .rule{flex:1;height:1px;background:linear-gradient(90deg,rgba(201,164,92,.65),rgba(201,164,92,0))}
 .menu-cat .hint{font-size:.68rem;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);white-space:nowrap}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(235px,1fr));gap:24px}
-.card{display:block;background:#fff;box-shadow:0 12px 34px -20px rgba(21,39,65,.24);overflow:hidden;transition:transform .22s,box-shadow .22s;opacity:0;transform:translateY(16px)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:28px}
+.card{display:block;background:#fff;border-radius:18px;box-shadow:0 10px 30px -20px rgba(21,39,65,.22);overflow:hidden;transition:transform .22s,box-shadow .22s;opacity:0;transform:translateY(16px)}
 .card.vis{opacity:1;transform:translateY(0)}
-.card:hover{transform:translateY(-5px);box-shadow:0 22px 46px -22px rgba(21,39,65,.36)}
-.card .ph{aspect-ratio:1.06;overflow:hidden;background:#fff}
+.card:hover{transform:translateY(-5px);box-shadow:0 22px 46px -22px rgba(21,39,65,.34)}
+.card .ph{aspect-ratio:16/10;overflow:hidden;background:#fff}
 .card .ph img{width:100%;height:100%;object-fit:cover;transition:transform .45s}
 .card:hover .ph img{transform:scale(1.08)}
 .card .ph.noimg{background:
@@ -175,7 +175,7 @@ section{padding:92px 24px}
 
 /* ---------- Platters ---------- */
 .platter-grid{display:grid;grid-template-columns:1fr 1fr;gap:30px;max-width:1120px;margin:0 auto}
-.platter{display:grid;background:#fff;box-shadow:0 16px 44px -22px rgba(21,39,65,.28);grid-template-columns:1.1fr 1fr;transition:transform .25s;overflow:hidden}
+.platter{display:grid;background:#fff;border-radius:18px;box-shadow:0 16px 44px -22px rgba(21,39,65,.28);grid-template-columns:1.1fr 1fr;transition:transform .25s;overflow:hidden}
 .platter:hover{transform:translateY(-4px)}
 .platter .pph{overflow:hidden}
 .platter .pph img{width:100%;height:100%;object-fit:cover;min-height:220px;transition:transform .5s}
