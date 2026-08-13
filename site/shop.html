@@ -62,7 +62,7 @@ main{max-width:1280px;margin:0 auto;padding:56px 24px 90px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:28px}
 .pcard{background:#fff;border-radius:18px;box-shadow:0 10px 30px -20px rgba(21,39,65,.22);overflow:hidden;display:flex;flex-direction:column;transition:transform .22s,box-shadow .22s}
 .pcard:hover{transform:translateY(-4px);box-shadow:0 22px 46px -22px rgba(21,39,65,.34)}
-.pcard .ph{aspect-ratio:16/10;overflow:hidden;background:#fff}
+.pcard .ph{aspect-ratio:16/10;overflow:hidden;background:#fff;cursor:zoom-in}
 .pcard .ph img{width:100%;height:100%;object-fit:cover;transition:transform .45s}
 .pcard:hover .ph img{transform:scale(1.07)}
 .pcard .ph.noimg{background:
@@ -121,6 +121,21 @@ main{max-width:1280px;margin:0 auto;padding:56px 24px 90px}
 .success .oid{font-family:'Playfair Display',serif;color:var(--gold);font-size:1.2rem;margin:12px 0}
 .empty{text-align:center;color:var(--ink-soft);padding:40px 0;font-weight:300}
 
+/* lightbox */
+.lb{position:fixed;inset:0;z-index:120;background:rgba(13,20,33,.82);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;padding:26px}
+.lb.open{display:flex}
+.lb-card{background:#fff;border-radius:22px;overflow:hidden;max-width:min(920px,96vw);max-height:92vh;display:flex;flex-direction:column;box-shadow:0 40px 100px -30px rgba(0,0,0,.6);animation:lbIn .28s ease}
+@keyframes lbIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
+.lb-img{background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.lb-img img{max-width:min(880px,94vw);max-height:62vh;width:auto;height:auto;object-fit:contain}
+.lb-info{padding:18px 26px 24px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;border-top:1px solid #f0e9da}
+.lb-info .n{font-family:'Playfair Display',serif;font-size:1.35rem;color:var(--navy)}
+.lb-info .d{font-size:.84rem;color:var(--ink-soft)}
+.lb-info .p{font-weight:600;color:var(--gold);font-size:1.15rem;white-space:nowrap}
+.lb-info .spacer{flex:1}
+.lb-x{position:absolute;top:18px;right:18px;width:44px;height:44px;border-radius:50%;border:none;background:rgba(255,255,255,.14);color:#fff;font-size:1.6rem;line-height:1;cursor:pointer;transition:background .2s}
+.lb-x:hover{background:rgba(255,255,255,.28)}
+@media(max-width:600px){.lb{padding:10px}.lb-info{padding:14px 16px 18px}}
 footer{background:var(--navy-deep);color:#b9c4d6;padding:70px 24px 34px;font-weight:300}
 .foot{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr;gap:44px}
 .foot .fb .fbrand{display:flex;align-items:center;gap:12px;margin-bottom:16px}
@@ -173,6 +188,22 @@ footer{background:var(--navy-deep);color:#b9c4d6;padding:70px 24px 34px;font-wei
 <div class="gold-strip"></div>
 
 <main id="main"><div class="empty">Loading the menu…</div></main>
+
+<div class="lb" id="lb">
+  <button class="lb-x" id="lbX" aria-label="Close">×</button>
+  <div class="lb-card">
+    <div class="lb-img"><img id="lbImg" alt=""></div>
+    <div class="lb-info">
+      <div>
+        <div class="n" id="lbName"></div>
+        <div class="d" id="lbDesc"></div>
+      </div>
+      <div class="spacer"></div>
+      <span class="p" id="lbPrice"></span>
+      <button class="add" id="lbAdd" style="flex:0 0 auto;padding:0 22px">Add to Order</button>
+    </div>
+  </div>
+</div>
 
 <div class="overlay" id="overlay"></div>
 <aside class="drawer" id="drawer">
@@ -277,6 +308,7 @@ function render(){
         (p.desc?'<div class="desc">'+p.desc+'</div>':'')+
         '<div class="addrow"><div class="qty"><button type="button" class="qm">−</button><input value="1" inputmode="numeric"><button type="button" class="qp">+</button></div>'+
         '<button class="add">Add to Order</button></div></div>';
+      card.querySelector('.ph').onclick = () => openLB(p);
       const inp = card.querySelector('input');
       card.querySelector('.qm').onclick = () => inp.value = Math.max(1, (parseInt(inp.value)||1) - 1);
       card.querySelector('.qp').onclick = () => inp.value = Math.min(99, (parseInt(inp.value)||1) + 1);
@@ -300,6 +332,30 @@ function render(){
     if (el){ setTimeout(()=>{ el.scrollIntoView({behavior:'smooth', block:'center'}); el.classList.add('flash'); setTimeout(()=>el.classList.remove('flash'), 2600); }, 150); }
   }
 }
+
+/* ---- lightbox ---- */
+let lbProduct = null;
+function openLB(p){
+  lbProduct = p;
+  $('#lbImg').src = p.img || '';
+  $('#lbImg').alt = p.name;
+  $('#lbName').textContent = p.name;
+  $('#lbDesc').textContent = p.desc || '';
+  $('#lbPrice').textContent = money(p.price) + (p.per ? ' / ' + p.per : '');
+  const btn = $('#lbAdd'); btn.textContent = 'Add to Order'; btn.classList.remove('added');
+  $('#lb').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLB(){ $('#lb').classList.remove('open'); document.body.style.overflow = ''; }
+$('#lbX').onclick = closeLB;
+$('#lb').addEventListener('click', e => { if (e.target === $('#lb')) closeLB(); });
+addEventListener('keydown', e => { if (e.key === 'Escape') closeLB(); });
+$('#lbAdd').onclick = () => {
+  if (!lbProduct) return;
+  cart[lbProduct.slug] = (cart[lbProduct.slug]||0) + 1; saveCart();
+  const btn = $('#lbAdd'); btn.textContent = 'Added ✓'; btn.classList.add('added');
+  setTimeout(()=>{ btn.textContent = 'Add to Order'; btn.classList.remove('added'); }, 1200);
+};
 
 /* ---- drawer ---- */
 function openDrawer(){ renderDrawer(); $('#overlay').classList.add('open'); $('#drawer').classList.add('open'); }
