@@ -121,9 +121,22 @@ main{max-width:1280px;margin:0 auto;padding:56px 24px 90px}
 .success .oid{font-family:'Playfair Display',serif;color:var(--gold);font-size:1.2rem;margin:12px 0}
 .empty{text-align:center;color:var(--ink-soft);padding:40px 0;font-weight:300}
 
-footer{background:var(--navy-deep);color:#b9c4d6;text-align:center;padding:34px 24px;font-weight:300;font-size:.9rem}
-footer a{text-decoration:underline;text-underline-offset:3px}
-footer a:hover{color:var(--gold-soft)}
+footer{background:var(--navy-deep);color:#b9c4d6;padding:70px 24px 34px;font-weight:300}
+.foot{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr;gap:44px}
+.foot .fb .fbrand{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.foot .fb .fbrand svg{width:44px;height:44px}
+.foot .fb .fbrand .nm{font-family:'Playfair Display',serif;font-size:1.3rem;color:#fff}
+.foot .fb p{font-size:.92rem;line-height:1.7}
+.foot h4{font-size:.7rem;font-weight:600;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
+.foot ul{list-style:none}
+.foot li{margin-bottom:10px;font-size:.94rem}
+.foot a:hover{color:#fff}
+.foot .note{font-size:.8rem;color:#8494ab;margin-top:10px}
+.copyline{max-width:1280px;margin:52px auto 0;padding-top:22px;border-top:1px solid rgba(255,255,255,.1);display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;font-size:.8rem;color:#8494ab}
+.copyline a{text-decoration:underline;text-underline-offset:3px}
+.copyline a:hover{color:var(--gold-soft)}
+@media(max-width:950px){.foot{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.foot{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -170,7 +183,46 @@ footer a:hover{color:var(--gold-soft)}
 
 <div class="gold-strip"></div>
 <footer>
-  The Baker's Pantry · 7 Van Buren Dr. #111, Monroe NY · <a href="tel:+18457832700">845.783.2700</a>
+  <div class="foot">
+    <div class="fb">
+      <div class="fbrand">
+        <svg viewBox="0 0 120 120"><defs><linearGradient id="gg3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f6e7bb"/><stop offset=".45" stop-color="#d4af63"/><stop offset=".75" stop-color="#9c7a3c"/><stop offset="1" stop-color="#eed9a4"/></linearGradient></defs><rect x="3" y="3" width="114" height="114" fill="none" stroke="url(#gg3)" stroke-width="3"/><rect x="13" y="13" width="94" height="94" fill="none" stroke="url(#gg3)" stroke-width="1.2"/><path d="M13 32 Q13 13 32 13" fill="none" stroke="url(#gg3)" stroke-width="2.2"/><path d="M88 13 Q107 13 107 32" fill="none" stroke="url(#gg3)" stroke-width="2.2"/><path d="M107 88 Q107 107 88 107" fill="none" stroke="url(#gg3)" stroke-width="2.2"/><path d="M32 107 Q13 107 13 88" fill="none" stroke="url(#gg3)" stroke-width="2.2"/><path d="M60 2 L65 8 L60 14 L55 8 Z" fill="url(#gg3)"/><path d="M60 106 L65 112 L60 118 L55 112 Z" fill="url(#gg3)"/><text x="60" y="75" text-anchor="middle" font-family="Playfair Display,Georgia,serif" font-style="italic" font-size="46" fill="url(#gg3)">BP</text></svg>
+        <span class="nm gtext">The Baker's Pantry</span>
+      </div>
+      <p>Handcrafted cheesecakes, cream-topped babkas, tarts and petite dairy treats — baked fresh in small batches in Monroe, New York.</p>
+    </div>
+    <div>
+      <h4>Explore</h4>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/#favorites">Favorites</a></li>
+        <li><a href="/#menu">Menu</a></li>
+        <li><a href="/shop">Order Online</a></li>
+        <li><a href="/#visit">Visit Us</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Ordering</h4>
+      <ul>
+        <li><a href="/shop">Order online</a> or by phone</li>
+        <li>Pay at pickup in Monroe, NY</li>
+        <li>Custom platters on request</li>
+      </ul>
+      <p class="note">For Yom Tov &amp; simchas, please order early.</p>
+    </div>
+    <div>
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="tel:+18457832700">845.783.2700</a></li>
+        <li>7 Van Buren Dr. #111</li>
+        <li>Monroe, NY</li>
+      </ul>
+    </div>
+  </div>
+  <div class="copyline">
+    <span>© <span id="yr"></span> The Baker's Pantry · All Rights Reserved</span>
+    <span>Site by <a href="https://bhwebs.com" target="_blank" rel="noopener">BH Web Solutions</a></span>
+  </div>
 </footer>
 
 <script>
@@ -186,6 +238,7 @@ footer a:hover{color:var(--gold-soft)}
   const onScroll = () => hdr.classList.toggle('scrolled', scrollY > 50);
   addEventListener('scroll', onScroll, {passive:true}); onScroll();
 })();
+document.getElementById('yr').textContent = new Date().getFullYear();
 </script>
 <script>
 let PRODUCTS = [], CATS = [];
