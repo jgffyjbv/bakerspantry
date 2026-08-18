@@ -2,3 +2,4 @@ raw/
 node_modules/
 .wrangler/
 .admin-password.txt
+.dev.vars

@@ -1,5 +1,7 @@
 /* The Baker's Pantry — API worker (KV-backed shop + admin) */
 
+import { EmailMessage } from "cloudflare:email";
+
 const CATS = [
   { key: "cheesecakes", name: "10″ Cheesecakes" },
   { key: "logs", name: "Cheesecake Logs" },
@@ -12,6 +14,19 @@ const CATS = [
   { key: "s-mini", name: "Sukkos Collection · Miniatures" },
   { key: "s-cookies", name: "Sukkos Collection · Cookies" },
   { key: "platters", name: "Assorted Combo Platters" }
+];
+
+/* Occasion / dietary tags. Seeded once into KV ("occasions") — after that the
+   admin's list is the source of truth and he can add, rename or remove freely. */
+const DEFAULT_OCCASIONS = [
+  { key: "birthday", name: "Birthday" },
+  { key: "bar-mitzvah", name: "Bar Mitzvah" },
+  { key: "upsherin", name: "Upsherin" },
+  { key: "purim", name: "Purim" },
+  { key: "sukkos", name: "Sukkos" },
+  { key: "special-occasion", name: "Special Occasion" },
+  { key: "milchig", name: "Milchig" },
+  { key: "pareve", name: "Pareve" }
 ];
 
 const SEED = [
@@ -63,10 +78,23 @@ const SEED = [
 const J = (obj, status = 200, extra = {}) =>
   new Response(JSON.stringify(obj), { status, headers: { "content-type": "application/json", ...extra } });
 
+const slugify = s => String(s || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 40);
+const usd = n => "$" + (Number.isInteger(Number(n)) ? Number(n) : Number(n).toFixed(2));
+
 async function getProducts(env) {
   let raw = await env.BP_KV.get("products");
   if (!raw) { await env.BP_KV.put("products", JSON.stringify(SEED)); return SEED; }
   return JSON.parse(raw);
+}
+
+async function getOccasions(env) {
+  let raw = await env.BP_KV.get("occasions");
+  if (!raw) { await env.BP_KV.put("occasions", JSON.stringify(DEFAULT_OCCASIONS)); return DEFAULT_OCCASIONS; }
+  return JSON.parse(raw);
+}
+
+async function getPlanners(env) {
+  return JSON.parse((await env.BP_KV.get("planners")) || "[]");
 }
 
 /* ---- session auth (HMAC cookie) ---- */
@@ -88,27 +116,95 @@ async function isAuthed(req, env) {
   return (await hmac(env, exp)) === sig;
 }
 
-async function notify(env, subject, message) {
+/* ---- party-planner session (separate HMAC cookie, bp_p) ---- */
+async function plannerFromRequest(req, env) {
+  const m = (req.headers.get("cookie") || "").match(/bp_p=([^;]+)/);
+  if (!m) return null;
+  const [id, exp, sig] = m[1].split(".");
+  if (!id || !exp || !sig || Number(exp) < Date.now()) return null;
+  if ((await hmac(env, "planner|" + id + "|" + exp)) !== sig) return null;
+  const planners = await getPlanners(env);
+  return planners.find(p => p.id === id) || null;
+}
+
+/* ============================================================
+   Order notifications.
+
+   Primary sender: Cloudflare Email Workers (SEND_EMAIL binding),
+   from orders@bhwebs.com — a zone with Email Routing enabled.
+   The recipient must be verified once as a Destination Address
+   on the Cloudflare account; until then sends fail loudly with
+   a hint rather than vanishing.
+
+   FormSubmit is kept only as a last resort if the binding is
+   missing: it answers 429 to every request from a Cloudflare
+   Worker IP (verified 2026-08-18), so it only really works when
+   the BROWSER posts to it — which shop.html does as a fallback
+   whenever the server-side send fails.
+   ============================================================ */
+function headerSafe(s) { return String(s == null ? "" : s).replace(/[\r\n]+/g, " ").slice(0, 200); }
+function addressOnly(s) { const m = String(s).match(/<([^>]+)>/); return (m ? m[1] : String(s)).trim(); }
+const EMAIL_RE = /^[^\s@<>,;]+@[^\s@<>,;]+\.[^\s@<>,;]+$/;
+
+function buildMime(from, sender, to, subject, body, replyTo) {
+  const domain = sender.split("@")[1] || "bhwebs.com";
+  const h = [
+    "From: " + headerSafe(from),
+    "To: " + headerSafe(to),
+    "Subject: " + headerSafe(subject),
+    "Message-ID: <" + crypto.randomUUID() + "@" + domain + ">",
+    "Date: " + new Date().toUTCString(),
+    "MIME-Version: 1.0",
+    "Content-Type: text/plain; charset=utf-8"
+  ];
+  if (replyTo && EMAIL_RE.test(replyTo)) h.push("Reply-To: " + headerSafe(replyTo));
+  return h.join("\r\n") + "\r\n\r\n" + body + "\r\n";
+}
+
+async function notify(env, subject, message, replyTo) {
   try {
     const cfg = JSON.parse((await env.BP_KV.get("config")) || "{}");
-    if (!cfg.notifyEmail) return { sent: false, reason: "no email configured" };
-    const r = await fetch("https://formsubmit.co/ajax/" + encodeURIComponent(cfg.notifyEmail), {
+    const to = String(cfg.notifyEmail || "").trim();
+    if (!to) return { sent: false, reason: "no email configured" };
+
+    if (env.SEND_EMAIL) {
+      try {
+        const from = env.MAIL_FROM || "The Baker's Pantry <orders@bhwebs.com>";
+        const sender = addressOnly(from);
+        const raw = buildMime(from, sender, to, subject, message, replyTo);
+        await env.SEND_EMAIL.send(new EmailMessage(sender, to, raw));
+        return { sent: true, provider: "cloudflare", to };
+      } catch (e) {
+        const msg = String((e && e.message) || e);
+        const hint = /verif/i.test(msg)
+          ? " — one-time step: this address must be verified. A verification email from Cloudflare was sent to it; click the link inside once and order emails flow."
+          : "";
+        return { sent: false, provider: "cloudflare", to, reason: msg + hint };
+      }
+    }
+
+    /* legacy path — see note above */
+    const r = await fetch("https://formsubmit.co/ajax/" + encodeURIComponent(to), {
       method: "POST",
       headers: { "content-type": "application/json", accept: "application/json" },
       body: JSON.stringify({ _subject: subject, name: "The Baker's Pantry Website", message })
     });
-    return { sent: r.ok, status: r.status };
+    const text = await r.text();
+    let ok = false;
+    try { const j = JSON.parse(text); ok = j.success === true || j.success === "true"; } catch {}
+    return { sent: ok, provider: "formsubmit", to, reason: ok ? undefined : "HTTP " + r.status };
   } catch (e) { return { sent: false, reason: String(e) }; }
 }
 
 function orderText(o) {
-  const lines = o.items.map(i => `${i.qty} x ${i.name} — $${i.price * i.qty}`);
-  return [
-    `Order ${o.id}`,
-    "",
-    ...lines,
-    "",
-    `TOTAL: $${o.total}`,
+  const lines = o.items.map(i => `${i.qty} x ${i.name} — ${usd(i.price * i.qty)}`);
+  const out = [`Order ${o.id}`, "", ...lines, ""];
+  if (o.discount) {
+    out.push(`Subtotal: ${usd(o.subtotal)}`);
+    out.push(`Party planner discount — ${o.discount.plannerName} (${o.discount.pct}% off): -${usd(o.discount.amount)}`);
+  }
+  out.push(
+    `TOTAL: ${usd(o.total)}`,
     "",
     `Customer: ${o.customer.name}`,
     `Phone: ${o.customer.phone}`,
@@ -117,7 +213,8 @@ function orderText(o) {
     o.customer.note ? `Note: ${o.customer.note}` : null,
     "",
     "Payment at pickup."
-  ].filter(Boolean).join("\n");
+  );
+  return out.filter(Boolean).join("\n");
 }
 
 export default {
@@ -130,7 +227,8 @@ export default {
     /* ---------- public ---------- */
     if (p === "/api/products" && request.method === "GET") {
       const products = await getProducts(env);
-      return J({ products, cats: CATS }, 200, { "cache-control": "no-store" });
+      const occasions = await getOccasions(env);
+      return J({ products, cats: CATS, occasions }, 200, { "cache-control": "no-store" });
     }
 
     if (p === "/api/order" && request.method === "POST") {
@@ -147,12 +245,24 @@ export default {
         if (pr) clean.push({ slug: pr.slug, name: pr.name, price: pr.price, per: pr.per, qty });
       }
       if (!clean.length) return J({ error: "No valid items." }, 400);
-      const total = clean.reduce((s, i) => s + i.price * i.qty, 0);
+
+      const subtotal = clean.reduce((s, i) => s + i.price * i.qty, 0);
+      /* the discount is computed HERE from the planner cookie — the browser
+         only ever displays it, it never gets to set it */
+      const planner = await plannerFromRequest(request, env);
+      let total = subtotal, discount;
+      if (planner && Number(planner.discount) > 0) {
+        const pct = Math.max(0, Math.min(100, Number(planner.discount)));
+        const amount = Math.round(subtotal * pct) / 100;
+        total = Math.round((subtotal - amount) * 100) / 100;
+        discount = { pct, amount, plannerId: planner.id, plannerName: planner.name, plannerEmail: planner.email };
+      }
+
       const d = new Date();
       const id = "BP-" + d.toISOString().slice(2, 10).replace(/-/g, "") + "-" +
         Math.random().toString(36).slice(2, 6).toUpperCase();
       const order = {
-        id, items: clean, total,
+        id, items: clean, subtotal, total, discount,
         customer: {
           name, phone,
           email: String(b.email || "").trim().slice(0, 120),
@@ -161,9 +271,39 @@ export default {
         },
         created: d.toISOString(), status: "new"
       };
+      const mail = await notify(env, "New order " + id + " — " + usd(total), orderText(order), order.customer.email);
+      order.mail = { sent: mail.sent, provider: mail.provider, reason: mail.reason };
       await env.BP_KV.put("order:" + d.getTime() + ":" + id, JSON.stringify(order));
-      const mail = await notify(env, "New order " + id + " — $" + total, orderText(order));
-      return J({ ok: true, id, total, emailSent: mail.sent });
+      return J({
+        ok: true, id, subtotal, total,
+        discount: discount ? { pct: discount.pct, amount: discount.amount } : null,
+        emailSent: mail.sent,
+        /* lets the browser fire the FormSubmit fallback when server-side mail failed */
+        notifyTo: mail.sent ? undefined : mail.to
+      });
+    }
+
+    /* ---------- party planner ---------- */
+    if (p === "/api/planner/login" && request.method === "POST") {
+      let b; try { b = await request.json(); } catch { return J({ error: "bad json" }, 400); }
+      const email = String(b.email || "").trim().toLowerCase();
+      const password = String(b.password || "");
+      const planners = await getPlanners(env);
+      const pl = planners.find(x => x.email === email && x.password === password);
+      if (!pl) return J({ error: "Wrong email or password." }, 401);
+      const exp = Date.now() + 30 * 864e5;
+      const sig = await hmac(env, "planner|" + pl.id + "|" + exp);
+      return J({ ok: true, name: pl.name, discount: pl.discount }, 200, {
+        "set-cookie": `bp_p=${pl.id}.${exp}.${sig}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${30 * 86400}`
+      });
+    }
+    if (p === "/api/planner/logout" && request.method === "POST") {
+      return J({ ok: true }, 200, { "set-cookie": "bp_p=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0" });
+    }
+    if (p === "/api/planner/me" && request.method === "GET") {
+      const pl = await plannerFromRequest(request, env);
+      if (!pl) return J({ error: "not signed in" }, 401);
+      return J({ ok: true, name: pl.name, email: pl.email, discount: pl.discount });
     }
 
     if (p.startsWith("/api/img/") && request.method === "GET") {
@@ -199,6 +339,9 @@ export default {
         let slug = String(x.slug || x.name || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 80);
         while (seen.has(slug)) slug += "-2";
         seen.add(slug);
+        const tags = Array.isArray(x.tags)
+          ? [...new Set(x.tags.map(slugify).filter(Boolean))].slice(0, 20)
+          : [];
         return {
           slug,
           name: String(x.name || "").slice(0, 120),
@@ -207,12 +350,44 @@ export default {
           per: String(x.per || "").slice(0, 30),
           img: x.img ? String(x.img).slice(0, 300) : null,
           fav: !!x.fav,
+          tags: tags.length ? tags : undefined,
           trio: x.trio ? String(x.trio).slice(0, 40) : undefined,
           desc: x.desc ? String(x.desc).slice(0, 300) : undefined
         };
       }).filter(x => x.name);
       await env.BP_KV.put("products", JSON.stringify(cleaned));
       return J({ ok: true, count: cleaned.length });
+    }
+
+    if (p === "/api/admin/occasions" && request.method === "POST") {
+      let b; try { b = await request.json(); } catch { return J({ error: "bad json" }, 400); }
+      if (!Array.isArray(b.occasions)) return J({ error: "occasions must be an array" }, 400);
+      const seen = new Set();
+      const cleaned = b.occasions.slice(0, 40).map(x => {
+        const name = String(x.name || "").trim().slice(0, 40);
+        const key = slugify(x.key || name);
+        return { key, name };
+      }).filter(x => x.key && x.name && !seen.has(x.key) && seen.add(x.key));
+      await env.BP_KV.put("occasions", JSON.stringify(cleaned));
+      return J({ ok: true, occasions: cleaned });
+    }
+
+    if (p === "/api/admin/planners" && request.method === "GET") {
+      return J({ planners: await getPlanners(env) });
+    }
+    if (p === "/api/admin/planners" && request.method === "POST") {
+      let b; try { b = await request.json(); } catch { return J({ error: "bad json" }, 400); }
+      if (!Array.isArray(b.planners)) return J({ error: "planners must be an array" }, 400);
+      const cleaned = b.planners.slice(0, 100).map(x => ({
+        id: /^pl_[a-z0-9]+$/.test(String(x.id || "")) ? x.id : "pl_" + crypto.randomUUID().replace(/-/g, "").slice(0, 12),
+        name: String(x.name || "").trim().slice(0, 80),
+        email: String(x.email || "").trim().toLowerCase().slice(0, 120),
+        password: String(x.password || "").slice(0, 80),
+        discount: Math.max(0, Math.min(100, Math.round(Number(x.discount) || 0))),
+        created: x.created || new Date().toISOString()
+      })).filter(x => x.name && x.email && x.password);
+      await env.BP_KV.put("planners", JSON.stringify(cleaned));
+      return J({ ok: true, planners: cleaned });
     }
 
     if (p === "/api/admin/orders" && request.method === "GET") {
@@ -250,7 +425,7 @@ export default {
     }
     if (p === "/api/admin/test-email" && request.method === "POST") {
       const r = await notify(env, "Test — The Baker's Pantry website",
-        "This is a test notification from your website's admin panel. If you received this, order emails are working.\n\nNote: the very first email from FormSubmit is an activation request — click the button in it once, then emails flow normally.");
+        "This is a test notification from your website's admin panel. If you received this, order emails are working.");
       return J(r);
     }
 

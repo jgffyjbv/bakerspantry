@@ -136,6 +136,12 @@ main{max-width:1360px;margin:0 auto;padding:26px 28px 90px}
 .success .oid{font-family:'DM Serif Display',serif;font-style:italic;font-size:19px;margin:12px 0;color:#fff}
 .dempty{text-align:center;color:var(--muted);padding:50px 0;font-style:italic}
 
+/* ---------- Party planner ---------- */
+.plbar{background:#3a3325;border-bottom:1px solid var(--line-soft);color:#e8d9ae;text-align:center;padding:9px 16px;font-size:13.5px;letter-spacing:.4px}
+.plbar a{text-decoration:underline;text-underline-offset:3px;color:#e8d9ae}
+.trow{display:flex;justify-content:space-between;font-size:14px;margin-bottom:6px;color:var(--muted)}
+.trow.disc{color:#9fd3a8}
+
 /* ---------- Footer ---------- */
 footer{border-top:1px solid var(--line-soft);background:#1d1b1b;text-align:center;padding:38px 24px;color:var(--muted);font-size:14px}
 footer a{text-decoration:underline;text-underline-offset:3px}
@@ -178,8 +184,11 @@ footer a:hover{color:#fff}
   <a href="#cat-s-mini" data-cat="s-mini">Sukkos · Miniatures</a>
   <a href="#cat-s-cookies" data-cat="s-cookies">Sukkos · Cookies</a>
   <a href="#cat-platters" data-cat="platters">Platters</a>
+  <a class="small" href="#" id="plannerLink">Party Planner Login</a>
   <a class="small" href="tel:+18457832700">Call · 845.783.2700</a>
 </aside>
+
+<div class="plbar" id="plBar" style="display:none"></div>
 
 <div class="colhead">
   <div class="crumb"><a href="/">Home</a> &nbsp;/&nbsp; <span id="crumbCat">SHOP ALL</span></div>
@@ -189,12 +198,15 @@ footer a:hover{color:#fff}
 <div class="catstrip" id="catStrip"></div>
 <div class="toolbar">
   <span class="count" id="countLine">Loading…</span>
-  <select id="sortSel">
-    <option value="featured">Featured</option>
-    <option value="price-asc">Price, low to high</option>
-    <option value="price-desc">Price, high to low</option>
-    <option value="az">Alphabetically, A–Z</option>
-  </select>
+  <div style="display:flex;gap:10px;flex-wrap:wrap">
+    <select id="occSel" style="display:none"><option value="">All Occasions</option></select>
+    <select id="sortSel">
+      <option value="featured">Featured</option>
+      <option value="price-asc">Price, low to high</option>
+      <option value="price-desc">Price, high to low</option>
+      <option value="az">Alphabetically, A–Z</option>
+    </select>
+  </div>
 </div>
 
 <main><div class="grid" id="grid"></div><div class="empty" id="emptyMsg" style="display:none">Nothing here yet.</div></main>
@@ -216,6 +228,20 @@ footer a:hover{color:#fff}
   </div>
 </div>
 
+<div class="lb" id="plModal">
+  <button class="lb-x" id="plX" aria-label="Close">×</button>
+  <div class="lb-card" style="max-width:430px;width:100%">
+    <div style="padding:30px 30px 28px">
+      <h3 style="font-family:'DM Serif Display',serif;font-size:25px;font-weight:400;margin-bottom:6px">Party Planner Login</h3>
+      <p style="color:var(--muted);font-size:13.5px;margin-bottom:18px">Sign in with the email and password The Baker's Pantry set up for you — your discount comes off automatically at checkout.</p>
+      <div class="field"><label>Email</label><input id="plEmail" inputmode="email" autocomplete="email"></div>
+      <div class="field"><label>Password</label><input id="plPass" type="password"></div>
+      <button class="checkout" id="plGo">Sign In</button>
+      <div class="msg" id="plMsg"></div>
+    </div>
+  </div>
+</div>
+
 <div class="overlay" id="overlay"></div>
 <aside class="drawer" id="drawer">
   <div class="dh"><h3>Your Order</h3><button id="closeDrawer" aria-label="Close">×</button></div>
@@ -228,7 +254,7 @@ footer a:hover{color:#fff}
 </footer>
 
 <script>
-let PRODUCTS = [], CATS = [], curCat = '', curSort = 'featured';
+let PRODUCTS = [], CATS = [], OCC = [], curCat = '', curOcc = '', curSort = 'featured', PLANNER = null;
 const cart = JSON.parse(localStorage.getItem('bp_cart') || '{}');
 const $ = s => document.querySelector(s);
 const money = n => '$' + Number(n).toFixed(2);
@@ -268,7 +294,7 @@ function sorted(items){
 function isNew(p){ return /new/i.test(p.desc||''); }
 
 function render(){
-  const items = sorted(PRODUCTS.filter(p => !curCat || p.cat === curCat));
+  const items = sorted(PRODUCTS.filter(p => (!curCat || p.cat === curCat) && (!curOcc || (p.tags||[]).includes(curOcc))));
   $('#countLine').textContent = 'Showing ' + items.length + ' result' + (items.length===1?'':'s');
   const grid = $('#grid');
   grid.innerHTML = items.map(p => `
@@ -279,6 +305,7 @@ function render(){
       <div class="pr">${money(p.price)}${p.per?` <span class="per">/ ${esc(p.per)}</span>`:''}</div>
     </div>`).join('');
   $('#emptyMsg').style.display = items.length ? 'none' : 'block';
+  $('#emptyMsg').textContent = curOcc ? 'Nothing in this category for that occasion — try "Shop All".' : 'Nothing here yet.';
   grid.querySelectorAll('.pcard').forEach(c => c.onclick = () => openLB(PRODUCTS.find(p=>p.slug===c.dataset.slug)));
 }
 
@@ -290,6 +317,60 @@ function buildStrip(){
 }
 
 $('#sortSel').onchange = e => { curSort = e.target.value; render(); };
+
+/* occasion filter — only occasions that actually have tagged products show up */
+function buildOcc(){
+  const withItems = OCC.filter(o => PRODUCTS.some(p => (p.tags||[]).includes(o.key)));
+  const sel = $('#occSel');
+  if (!withItems.length){ sel.style.display = 'none'; return; }
+  sel.innerHTML = '<option value="">All Occasions</option>' + withItems.map(o=>`<option value="${esc(o.key)}">${esc(o.name)}</option>`).join('');
+  sel.style.display = '';
+  sel.onchange = e => {
+    curOcc = e.target.value;
+    if (curOcc && curCat) setCat('');   /* an occasion spans categories — jump back to Shop All */
+    else render();
+  };
+}
+
+/* ---------- party planner ---------- */
+function plannerUI(){
+  const link = $('#plannerLink'), bar = $('#plBar');
+  if (PLANNER){
+    link.textContent = 'Planner: ' + PLANNER.name + ' · Log Out';
+    bar.style.display = '';
+    bar.innerHTML = 'Party planner — <b>' + esc(PLANNER.name) + '</b> · your ' + PLANNER.discount + '% discount comes off at checkout · <a href="#" id="plOut">log out</a>';
+    $('#plOut').onclick = e => { e.preventDefault(); plannerLogout(); };
+  } else {
+    link.textContent = 'Party Planner Login';
+    bar.style.display = 'none';
+  }
+}
+function openPlModal(){ $('#plMsg').textContent=''; $('#plModal').classList.add('open'); document.body.style.overflow='hidden'; setTimeout(()=>$('#plEmail').focus(),50); }
+function closePlModal(){ $('#plModal').classList.remove('open'); document.body.style.overflow=''; }
+$('#plX').onclick = closePlModal;
+$('#plModal').addEventListener('click', e => { if (e.target === $('#plModal')) closePlModal(); });
+$('#plannerLink').onclick = e => {
+  e.preventDefault(); setMenu(false);
+  if (PLANNER) plannerLogout(); else openPlModal();
+};
+async function plannerLogout(){
+  await fetch('/api/planner/logout', {method:'POST'}).catch(()=>{});
+  PLANNER = null; plannerUI();
+  if ($('#drawer').classList.contains('open')) renderDrawer();
+}
+async function plannerLogin(){
+  const msg = $('#plMsg'); msg.className='msg'; msg.textContent='Signing in…';
+  try{
+    const r = await fetch('/api/planner/login', {method:'POST', headers:{'content-type':'application/json'},
+      body: JSON.stringify({email: $('#plEmail').value, password: $('#plPass').value})});
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.error || 'Could not sign in.');
+    PLANNER = d; plannerUI(); closePlModal();
+    if ($('#drawer').classList.contains('open')) renderDrawer();
+  }catch(e){ msg.className='msg err'; msg.textContent = e.message; }
+}
+$('#plGo').onclick = plannerLogin;
+$('#plPass').addEventListener('keydown', e => { if (e.key==='Enter') plannerLogin(); });
 
 /* ---------- lightbox ---------- */
 let lbProduct = null;
@@ -307,7 +388,7 @@ function openLB(p){
 function closeLB(){ $('#lb').classList.remove('open'); document.body.style.overflow = ''; }
 $('#lbX').onclick = closeLB;
 $('#lb').addEventListener('click', e => { if (e.target === $('#lb')) closeLB(); });
-addEventListener('keydown', e => { if (e.key === 'Escape'){ closeLB(); setMenu(false); closeDrawer(); } });
+addEventListener('keydown', e => { if (e.key === 'Escape'){ closeLB(); setMenu(false); closeDrawer(); closePlModal(); } });
 $('#lbQm').onclick = () => $('#lbQty').value = Math.max(1, (parseInt($('#lbQty').value)||1)-1);
 $('#lbQp').onclick = () => $('#lbQty').value = Math.min(99, (parseInt($('#lbQty').value)||1)+1);
 $('#lbAdd').onclick = () => {
@@ -340,8 +421,13 @@ function renderDrawer(){
     const s=b.dataset.s; cart[s]+= +b.dataset.d; if (cart[s]<1) delete cart[s]; saveCart(); renderDrawer();
   });
   body.querySelectorAll('.rm').forEach(b => b.onclick = () => { delete cart[b.dataset.s]; saveCart(); renderDrawer(); });
-  foot.innerHTML = `
-    <div class="total-row"><span>Total</span><span>${money(total)}</span></div>
+  const pct = PLANNER ? Number(PLANNER.discount)||0 : 0;
+  const damt = pct ? Math.round(total*pct)/100 : 0;
+  const grand = Math.round((total-damt)*100)/100;
+  foot.innerHTML = (pct ? `
+    <div class="trow"><span>Subtotal</span><span>${money(total)}</span></div>
+    <div class="trow disc"><span>Planner discount (${pct}%)</span><span>−${money(damt)}</span></div>` : '') + `
+    <div class="total-row"><span>Total</span><span>${money(pct?grand:total)}</span></div>
     <div class="note">Pay at pickup — we'll have it boxed and ready. For Yom Tov, please order early.</div>
     <div class="field"><label>Name *</label><input id="cName" autocomplete="name"></div>
     <div class="field"><label>Phone *</label><input id="cPhone" autocomplete="tel" inputmode="tel"></div>
@@ -359,23 +445,44 @@ async function placeOrder(){
                     pickup: $('#cPickup').value, note: $('#cNote').value, items };
   if (!payload.name.trim() || !payload.phone.trim()){ msg.className='msg err'; msg.textContent='Please fill in your name and phone number.'; return; }
   btn.disabled = true; msg.className='msg'; msg.textContent = 'Placing your order…';
+  const itemsText = Object.entries(cart).map(([s,q]) => { const p = PRODUCTS.find(x=>x.slug===s); return p ? q+' x '+p.name : ''; }).filter(Boolean).join('\n');
   try{
     const r = await fetch('/api/order', {method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify(payload)});
     const d = await r.json();
     if (!r.ok) throw new Error(d.error || 'Something went wrong.');
     Object.keys(cart).forEach(k=>delete cart[k]); saveCart();
+    const discLine = d.discount && d.discount.amount
+      ? `<br>Includes your ${d.discount.pct}% party-planner discount (−${money(d.discount.amount)}).` : '';
     $('#dbody').innerHTML = `<div class="success"><h3>Thank you!</h3><div class="oid">Order ${d.id}</div>
-      <p>Your order for <b>${money(d.total)}</b> is in. We'll confirm by phone and have everything ready at pickup — payment at pickup.</p></div>`;
+      <p>Your order for <b>${money(d.total)}</b> is in.${discLine}<br>We'll confirm by phone and have everything ready at pickup — payment at pickup.</p></div>`;
     $('#dfoot').innerHTML = '';
+    /* server-side email failed (e.g. address not verified yet) — fall back to
+       FormSubmit straight from the browser, where it still works */
+    if (d.emailSent === false && d.notifyTo){
+      fetch('https://formsubmit.co/ajax/' + encodeURIComponent(d.notifyTo), {
+        method:'POST', headers:{'content-type':'application/json', accept:'application/json'},
+        body: JSON.stringify({
+          _subject: 'New order ' + d.id + ' — ' + money(d.total), _template:'box', _captcha:'false',
+          name: payload.name, phone: payload.phone, email: payload.email || '',
+          pickup: payload.pickup || '', note: payload.note || '',
+          order: itemsText, total: money(d.total)
+        })
+      }).catch(()=>{});
+    }
   }catch(e){ msg.className='msg err'; msg.textContent = e.message; btn.disabled = false; }
 }
 
 /* ---------- boot ---------- */
+fetch('/api/planner/me').then(r => r.ok ? r.json() : null).then(d => {
+  if (d && d.ok){ PLANNER = d; plannerUI(); if ($('#drawer').classList.contains('open')) renderDrawer(); }
+}).catch(()=>{});
+
 fetch('/api/products').then(r=>r.json()).then(d => {
-  PRODUCTS = d.products; CATS = d.cats;
-  buildStrip(); saveCart();
+  PRODUCTS = d.products; CATS = d.cats; OCC = d.occasions || [];
+  buildStrip(); buildOcc(); saveCart();
   const h = location.hash.replace('#','');
-  if (h.startsWith('cat-')) setCat(h.slice(4));
+  if (h === 'planner-login'){ render(); if (!PLANNER) openPlModal(); }
+  else if (h.startsWith('cat-')) setCat(h.slice(4));
   else { render(); }
   if (h.startsWith('item-')){
     render();

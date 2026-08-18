@@ -15,5 +15,11 @@
       "binding": "BP_KV",
       "id": "b4e94a01e7e749329f86dbd6c490a061"
     }
+  ],
+  "vars": {
+    "MAIL_FROM": "The Baker's Pantry <orders@bhwebs.com>"
+  },
+  "send_email": [
+    { "name": "SEND_EMAIL" }
   ]
 }

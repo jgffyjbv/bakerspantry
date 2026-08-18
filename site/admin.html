@@ -26,9 +26,11 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
 .card{background:#fff;box-shadow:0 10px 30px -18px rgba(21,39,65,.25);padding:20px;margin-bottom:16px}
 .badge{display:inline-block;font-size:.66rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;padding:3px 10px}
 .badge.new{background:#eaf3ff;color:#215a9c}.badge.done{background:#e9f5ee;color:var(--ok)}
+.badge.planner{background:#f7efdd;color:#8a5a00}
 .order-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
 .order-head .oid{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--navy)}
 .order-items{margin:12px 0;border-top:1px dashed #e2dcce;padding-top:10px;font-size:.94rem}
+.order-disc{font-size:.9rem;color:#8a5a00;margin:6px 0}
 .order-cust{font-size:.9rem;color:var(--ink-soft)}
 .oactions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
 .btn{border:none;padding:9px 16px;font-size:.72rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase}
@@ -50,6 +52,16 @@ td .noimg{width:46px;height:46px;background:var(--cream);display:flex;align-item
 .empty{color:var(--ink-soft);padding:30px;text-align:center}
 .chk{display:flex;align-items:center;gap:8px}
 .chk input{width:auto}
+/* occasion pickers */
+details.occdd{position:relative}
+details.occdd summary{cursor:pointer;list-style:none;border:1px solid #d8d2c4;background:#fff;padding:7px 10px;font-size:.84rem;max-width:180px;min-width:110px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink)}
+details.occdd summary::-webkit-details-marker{display:none}
+details.occdd summary::after{content:' ▾';color:var(--ink-soft)}
+details.occdd[open] summary{border-color:var(--gold)}
+details.occdd .occlist{position:absolute;z-index:20;background:#fff;border:1px solid #d8d2c4;box-shadow:0 12px 30px -12px rgba(21,39,65,.35);padding:10px 12px;min-width:190px;max-height:280px;overflow:auto}
+details.occdd .occlist label,.occrow label{display:flex;gap:8px;align-items:center;font-size:.88rem;padding:4px 0;font-weight:400;text-transform:none;letter-spacing:0;color:var(--ink);cursor:pointer}
+details.occdd .occlist input,.occrow input{width:auto}
+.occrow{display:flex;flex-wrap:wrap;gap:2px 18px;border:1px solid #d8d2c4;background:#fff;padding:8px 12px}
 @media(max-width:760px){table{display:block;overflow-x:auto}}
 </style>
 </head>
@@ -75,6 +87,8 @@ td .noimg{width:46px;height:46px;background:var(--cream);display:flex;align-item
     <div class="tabs">
       <button data-t="orders" class="on">Orders <span id="newCount"></span></button>
       <button data-t="products">Products</button>
+      <button data-t="occasions">Occasions</button>
+      <button data-t="planners">Party Planners</button>
       <button data-t="settings">Settings</button>
     </div>
 
@@ -94,10 +108,41 @@ td .noimg{width:46px;height:46px;background:var(--cream);display:flex;align-item
           <div><label>Upload Photo</label><input type="file" id="npFile" accept="image/*"></div>
           <div class="chk"><input type="checkbox" id="npFav"><label style="margin:0">Show in Favorites</label></div>
         </div>
+        <div style="margin-top:12px"><label style="display:block;font-size:.64rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--navy);margin-bottom:5px">Occasions (tick all that fit)</label><div class="occrow" id="npOcc"></div></div>
         <div style="margin-top:14px"><button class="btn gold" id="npAdd">Add Product</button><span class="msg" id="npMsg"></span></div>
-        <div class="hintline">New products show up on the shop right away, and on the front page under their category. If a photo is missing, the site shows an elegant "photo coming soon" card.</div>
+        <div class="hintline">New products show up on the shop right away, and on the front page under their category. Occasions power the "Filter by occasion" dropdown on the shop — tick Milchig/Pareve and any occasions the item fits.</div>
       </div>
       <div id="prodTable"></div>
+    </div>
+
+    <div class="pane" id="pane-occasions">
+      <div class="card">
+        <h3 style="margin-bottom:12px">Occasions &amp; Filters</h3>
+        <p style="font-size:.92rem;color:var(--ink-soft);margin-bottom:12px">These show up in the "Filter by occasion" dropdown on the shop page. Tag your products with them in the <b>Products</b> tab. Customers only see an occasion once at least one product is tagged with it.</p>
+        <div class="formgrid">
+          <div style="grid-column:span 2"><label>New occasion name</label><input id="ocName" placeholder="e.g. Chanukah"></div>
+          <div><button class="btn gold" id="ocAdd">Add Occasion</button></div>
+        </div>
+        <div class="msg" id="ocMsg"></div>
+      </div>
+      <div id="occTable"></div>
+    </div>
+
+    <div class="pane" id="pane-planners">
+      <div class="card">
+        <h3 style="margin-bottom:12px">Add a Party Planner</h3>
+        <p style="font-size:.92rem;color:var(--ink-soft);margin-bottom:12px">Party planners get their own sign-in on the shop page ("Party Planner Login" in the menu). When they're signed in, their discount comes off automatically at checkout and their name shows on the order.</p>
+        <div class="formgrid">
+          <div><label>Name</label><input id="plName"></div>
+          <div><label>Email (their login)</label><input id="plEmail" inputmode="email"></div>
+          <div><label>Password</label><input id="plPass"></div>
+          <div><label>Discount %</label><input id="plDisc" inputmode="numeric" value="10"></div>
+          <div><button class="btn gold" id="plAdd">Add Planner</button></div>
+        </div>
+        <div class="msg" id="plMsg"></div>
+        <div class="hintline">Send the planner their email + password yourself (WhatsApp / phone). You can change the discount or password here any time — it takes effect on their next order.</div>
+      </div>
+      <div id="plTable"></div>
     </div>
 
     <div class="pane" id="pane-settings">
@@ -110,7 +155,7 @@ td .noimg{width:46px;height:46px;background:var(--cream);display:flex;align-item
           <div><button class="btn ghost" id="setTest">Send Test Email</button></div>
         </div>
         <div class="msg" id="setMsg"></div>
-        <div class="hintline"><b>One-time step:</b> the very first email arrives from FormSubmit and asks you to confirm — click the button in that email once, and all future order emails come through automatically.</div>
+        <div class="hintline"><b>One-time step:</b> order emails come from <b>orders@bhwebs.com</b>. The first time you use a new address, Cloudflare sends it a one-time verification email — open it and click the link once, and all future order emails come through automatically.</div>
       </div>
     </div>
   </div>
@@ -118,7 +163,9 @@ td .noimg{width:46px;height:46px;background:var(--cream);display:flex;align-item
 
 <script>
 const $ = s => document.querySelector(s);
-let PRODUCTS = [], CATS = [];
+let PRODUCTS = [], CATS = [], OCC = [], PLANNERS = [];
+const usd = n => '$' + (Number.isInteger(+n) ? +n : (+n).toFixed(2));
+const esc = s => String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
 
 async function api(path, opts={}){
   const r = await fetch(path, {headers:{'content-type':'application/json'}, ...opts});
@@ -155,14 +202,16 @@ async function loadOrders(){
         <span class="oid">${o.id}</span>
         <span>${new Date(o.created).toLocaleString()}</span>
         <span class="badge ${o.status}">${o.status}</span>
-        <b>$${o.total}</b>
+        ${o.discount?'<span class="badge planner">planner</span>':''}
+        <b>${usd(o.total)}</b>
       </div>
-      <div class="order-items">${o.items.map(i=>`${i.qty} × ${i.name} — $${i.price*i.qty}`).join('<br>')}</div>
+      <div class="order-items">${o.items.map(i=>`${i.qty} × ${esc(i.name)} — ${usd(i.price*i.qty)}`).join('<br>')}</div>
+      ${o.discount?`<div class="order-disc">Subtotal ${usd(o.subtotal)} · <b>${esc(o.discount.plannerName)}</b> — ${o.discount.pct}% planner discount (−${usd(o.discount.amount)})</div>`:''}
       <div class="order-cust">
-        <b>${o.customer.name}</b> · <a href="tel:${o.customer.phone}">${o.customer.phone}</a>
-        ${o.customer.email?' · '+o.customer.email:''}
-        ${o.customer.pickup?'<br>Pickup: '+o.customer.pickup:''}
-        ${o.customer.note?'<br>Note: '+o.customer.note:''}
+        <b>${esc(o.customer.name)}</b> · <a href="tel:${esc(o.customer.phone)}">${esc(o.customer.phone)}</a>
+        ${o.customer.email?' · '+esc(o.customer.email):''}
+        ${o.customer.pickup?'<br>Pickup: '+esc(o.customer.pickup):''}
+        ${o.customer.note?'<br>Note: '+esc(o.customer.note):''}
       </div>
       <div class="oactions">
         ${o.status==='new'
@@ -178,21 +227,44 @@ window.delOrder = async (key) => { if (confirm('Delete this order?')){ await api
 /* ---------- products ---------- */
 async function loadProducts(){
   const d = await fetch('/api/products').then(r=>r.json());
-  PRODUCTS = d.products; CATS = d.cats;
-  $('#npCat').innerHTML = CATS.map(c=>`<option value="${c.key}">${c.name}</option>`).join('');
-  renderProducts();
+  PRODUCTS = d.products; CATS = d.cats; OCC = d.occasions || [];
+  $('#npCat').innerHTML = CATS.map(c=>`<option value="${c.key}">${esc(c.name)}</option>`).join('');
+  renderProducts(); renderNpOcc(); renderOccasions();
 }
+function occSummary(tags){
+  const sel = tags||[];
+  const names = OCC.filter(o=>sel.includes(o.key)).map(o=>o.name);
+  return names.length ? names.join(', ') : 'None';
+}
+function occCell(p, i){
+  const sel = p.tags||[];
+  return `<details class="occdd"><summary id="occsum-${i}">${esc(occSummary(sel))}</summary><div class="occlist">` +
+    OCC.map(o=>`<label><input type="checkbox" data-i="${i}" data-k="${o.key}" ${sel.includes(o.key)?'checked':''} onchange="toggleTag(this)"> ${esc(o.name)}</label>`).join('') +
+    `</div></details>`;
+}
+window.toggleTag = (el) => {
+  const i = +el.dataset.i, k = el.dataset.k;
+  const t = new Set(PRODUCTS[i].tags||[]);
+  el.checked ? t.add(k) : t.delete(k);
+  PRODUCTS[i].tags = [...t];
+  document.getElementById('occsum-'+i).textContent = occSummary(PRODUCTS[i].tags);
+  saveProductsQuiet();
+};
 function renderProducts(){
-  $('#prodTable').innerHTML = '<table><tr><th></th><th>Name</th><th>Category</th><th>Price</th><th>Per</th><th>Fav</th><th></th></tr>' +
+  $('#prodTable').innerHTML = '<table><tr><th></th><th>Name</th><th>Category</th><th>Occasions</th><th>Price</th><th>Per</th><th>Fav</th><th></th></tr>' +
     PRODUCTS.map((p,i)=>`<tr>
-      <td>${p.img?`<img src="${p.img}">`:'<div class="noimg">'+p.name[0]+'</div>'}</td>
-      <td>${p.name}</td>
-      <td>${(CATS.find(c=>c.key===p.cat)||{}).name||p.cat}</td>
+      <td>${p.img?`<img src="${esc(p.img)}">`:'<div class="noimg">'+esc(p.name[0])+'</div>'}</td>
+      <td>${esc(p.name)}</td>
+      <td>${esc((CATS.find(c=>c.key===p.cat)||{}).name||p.cat)}</td>
+      <td>${occCell(p,i)}</td>
       <td><input style="width:70px" value="${p.price}" onchange="PRODUCTS[${i}].price=this.value;saveProducts()"></td>
-      <td><input style="width:80px" value="${p.per||''}" onchange="PRODUCTS[${i}].per=this.value;saveProducts()"></td>
+      <td><input style="width:80px" value="${esc(p.per||'')}" onchange="PRODUCTS[${i}].per=this.value;saveProducts()"></td>
       <td style="text-align:center"><input type="checkbox" ${p.fav?'checked':''} onchange="PRODUCTS[${i}].fav=this.checked;saveProducts()"></td>
       <td><button class="btn red" onclick="removeProduct(${i})">Remove</button></td>
     </tr>`).join('') + '</table>';
+}
+function renderNpOcc(){
+  $('#npOcc').innerHTML = OCC.map(o=>`<label><input type="checkbox" class="npocc" value="${o.key}"> ${esc(o.name)}</label>`).join('') || '<span style="font-size:.85rem;color:var(--ink-soft)">No occasions yet — add some in the Occasions tab.</span>';
 }
 window.removeProduct = async (i) => {
   if (!confirm('Remove "'+PRODUCTS[i].name+'" from the site and shop?')) return;
@@ -201,6 +273,10 @@ window.removeProduct = async (i) => {
 window.saveProducts = async () => {
   await api('/api/admin/products',{method:'POST',body:JSON.stringify({products:PRODUCTS})});
   const d = await fetch('/api/products').then(r=>r.json()); PRODUCTS = d.products; renderProducts();
+};
+/* saves without re-rendering the table, so the occasions dropdown stays open while ticking */
+window.saveProductsQuiet = async () => {
+  await api('/api/admin/products',{method:'POST',body:JSON.stringify({products:PRODUCTS})});
 };
 $('#npAdd').onclick = async () => {
   const msg = $('#npMsg');
@@ -217,11 +293,81 @@ $('#npAdd').onclick = async () => {
       if (!up.ok) throw new Error(ud.error||'upload failed');
       img = ud.url;
     }
-    PRODUCTS.push({name, cat: $('#npCat').value, price, per: $('#npPer').value.trim(), img, fav: $('#npFav').checked});
+    const tags = [...document.querySelectorAll('.npocc:checked')].map(x=>x.value);
+    PRODUCTS.push({name, cat: $('#npCat').value, price, per: $('#npPer').value.trim(), img, fav: $('#npFav').checked, tags});
     await saveProducts();
     msg.className='msg ok'; msg.textContent='Added! It\'s live on the shop now.';
     $('#npName').value=$('#npPrice').value=$('#npPer').value=$('#npImg').value=''; $('#npFile').value=''; $('#npFav').checked=false;
+    document.querySelectorAll('.npocc:checked').forEach(x=>x.checked=false);
   }catch(e){ msg.className='msg err'; msg.textContent=e.message; }
+};
+
+/* ---------- occasions ---------- */
+function renderOccasions(){
+  $('#occTable').innerHTML = OCC.length ? '<table><tr><th>Occasion</th><th style="width:220px">Products tagged</th><th></th></tr>' +
+    OCC.map((o,i)=>{
+      const n = PRODUCTS.filter(p=>(p.tags||[]).includes(o.key)).length;
+      return `<tr>
+        <td><input style="max-width:260px" value="${esc(o.name)}" onchange="OCC[${i}].name=this.value;saveOccasions()"></td>
+        <td>${n ? n+' product'+(n===1?'':'s') : '<span style="color:var(--ink-soft)">none yet — hidden on the shop</span>'}</td>
+        <td><button class="btn red" onclick="removeOccasion(${i})">Remove</button></td>
+      </tr>`;
+    }).join('') + '</table>' : '<div class="empty">No occasions yet.</div>';
+}
+window.removeOccasion = async (i) => {
+  const o = OCC[i];
+  const n = PRODUCTS.filter(p=>(p.tags||[]).includes(o.key)).length;
+  if (!confirm('Remove "'+o.name+'"'+(n?' ('+n+' products are tagged with it — they stay, just untagged)':'')+'?')) return;
+  OCC.splice(i,1); await saveOccasions();
+};
+window.saveOccasions = async () => {
+  const d = await api('/api/admin/occasions',{method:'POST',body:JSON.stringify({occasions:OCC})});
+  OCC = d.occasions; renderOccasions(); renderNpOcc(); renderProducts();
+};
+$('#ocAdd').onclick = async () => {
+  const msg = $('#ocMsg');
+  const name = $('#ocName').value.trim();
+  if (!name){ msg.className='msg err'; msg.textContent='Give the occasion a name.'; return; }
+  OCC.push({name});
+  await saveOccasions();
+  msg.className='msg ok'; msg.textContent='Added! Tag products with it in the Products tab.';
+  $('#ocName').value='';
+};
+
+/* ---------- party planners ---------- */
+async function loadPlanners(){
+  const d = await api('/api/admin/planners');
+  PLANNERS = d.planners || [];
+  renderPlanners();
+}
+function renderPlanners(){
+  $('#plTable').innerHTML = PLANNERS.length ? '<table><tr><th>Name</th><th>Email (login)</th><th>Password</th><th>Discount %</th><th></th></tr>' +
+    PLANNERS.map((p,i)=>`<tr>
+      <td><input style="min-width:130px" value="${esc(p.name)}" onchange="PLANNERS[${i}].name=this.value;savePlanners()"></td>
+      <td><input style="min-width:190px" value="${esc(p.email)}" onchange="PLANNERS[${i}].email=this.value;savePlanners()"></td>
+      <td><input style="min-width:120px" value="${esc(p.password)}" onchange="PLANNERS[${i}].password=this.value;savePlanners()"></td>
+      <td><input style="width:70px" value="${p.discount}" inputmode="numeric" onchange="PLANNERS[${i}].discount=this.value;savePlanners()"></td>
+      <td><button class="btn red" onclick="removePlanner(${i})">Remove</button></td>
+    </tr>`).join('') + '</table>' : '<div class="empty">No party planners yet — add the first one above.</div>';
+}
+window.removePlanner = async (i) => {
+  if (!confirm('Remove planner "'+PLANNERS[i].name+'"? They won\'t be able to sign in any more.')) return;
+  PLANNERS.splice(i,1); await savePlanners();
+};
+window.savePlanners = async () => {
+  const d = await api('/api/admin/planners',{method:'POST',body:JSON.stringify({planners:PLANNERS})});
+  PLANNERS = d.planners; renderPlanners();
+};
+$('#plAdd').onclick = async () => {
+  const msg = $('#plMsg');
+  const name = $('#plName').value.trim(), email = $('#plEmail').value.trim(), pass = $('#plPass').value.trim();
+  const disc = parseInt($('#plDisc').value);
+  if (!name || !email || !pass){ msg.className='msg err'; msg.textContent='Name, email and password are all needed.'; return; }
+  if (!/@/.test(email)){ msg.className='msg err'; msg.textContent='That email doesn\'t look right.'; return; }
+  PLANNERS.push({name, email, password: pass, discount: isNaN(disc)?0:disc});
+  await savePlanners();
+  msg.className='msg ok'; msg.textContent='Added! Send '+name+' their email + password so they can sign in on the shop.';
+  $('#plName').value=$('#plEmail').value=$('#plPass').value=''; $('#plDisc').value='10';
 };
 
 /* ---------- settings ---------- */
@@ -237,10 +383,10 @@ $('#setTest').onclick = async () => {
   const m = $('#setMsg'); m.className='msg'; m.textContent='Sending…';
   const d = await api('/api/admin/test-email',{method:'POST'});
   m.className = d.sent ? 'msg ok' : 'msg err';
-  m.textContent = d.sent ? 'Test sent! Check your inbox (first time: click the FormSubmit confirmation).' : 'Could not send: '+(d.reason||d.status||'is an email saved?');
+  m.textContent = d.sent ? 'Test sent! Check the inbox (and spam folder).' : 'Could not send: '+(d.reason||d.status||'is an email saved?');
 };
 
-function loadAll(){ loadOrders(); loadProducts(); loadSettings(); }
+function loadAll(){ loadOrders(); loadProducts(); loadPlanners(); loadSettings(); }
 
 /* boot */
 fetch('/api/admin/me').then(r => { if (r.ok) showApp(); else showLogin(); });
