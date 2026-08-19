@@ -317,7 +317,12 @@ export default {
     /* ---------- admin ---------- */
     if (p === "/api/admin/login" && request.method === "POST") {
       let b; try { b = await request.json(); } catch { return J({ error: "bad json" }, 400); }
-      if (!env.ADMIN_PASSWORD || b.password !== env.ADMIN_PASSWORD) return J({ error: "Wrong password." }, 401);
+      /* two valid passwords: the original (on the Mac) and the one given to the client */
+      const okPw = b.password && (
+        (env.ADMIN_PASSWORD && b.password === env.ADMIN_PASSWORD) ||
+        (env.ADMIN_PASSWORD_2 && b.password === env.ADMIN_PASSWORD_2)
+      );
+      if (!okPw) return J({ error: "Wrong password." }, 401);
       const token = await makeToken(env);
       return J({ ok: true }, 200, {
         "set-cookie": `bp_s=${token}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${7 * 86400}`
